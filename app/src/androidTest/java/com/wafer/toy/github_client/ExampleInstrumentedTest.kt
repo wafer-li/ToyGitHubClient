@@ -1,4 +1,4 @@
-package wafer.com.toygithubclient
+package com.wafer.toy.github_client
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry
@@ -22,6 +22,6 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
 
-        assertEquals("wafer.com.toygithubclient", appContext.packageName)
+        assertEquals("wafer.com.toy.toygithubclient", appContext.packageName)
     }
 }

@@ -1,4 +1,4 @@
-package wafer.com.toygithubclient
+package com.wafer.toy.github_client
 
 import org.junit.Test
 

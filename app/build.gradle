@@ -5,7 +5,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
-        applicationId "wafer.com.toygithubclient"
+        applicationId "com.wafer.toy.github_client"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
