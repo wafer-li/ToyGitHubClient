@@ -9,6 +9,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="CLIENT_ID"
+            android:value="4c4ae808e2807bd70cbe"/>
+        <meta-data
+            android:name="CLIENT_SECRET"
+            android:value="1107bd7e9e41afd41871d8502497f08f20f72def"/>
+
         <activity android:name="com.wafer.toy.github_client.ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
