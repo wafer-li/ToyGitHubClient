@@ -1,13 +1,13 @@
 package com.wafer.toy.github_client.ui.activity
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import com.wafer.toy.github_client.R
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+    override fun initView() {
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun getLayoutRes(): Int {
+        return R.layout.activity_main
     }
 }
