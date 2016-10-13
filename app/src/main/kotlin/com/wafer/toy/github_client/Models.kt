@@ -1,8 +1,10 @@
 package com.wafer.toy.github_client
 
 /**
- * The Models class
- * Please put more info here.
+ * The Models module
+ *
+ * Containing the data class of the whole application
+ *
  * @author wafer
  * @since 16/10/14 01:50
  */
