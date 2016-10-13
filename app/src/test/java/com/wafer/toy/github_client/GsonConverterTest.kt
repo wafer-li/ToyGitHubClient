@@ -24,7 +24,7 @@ class GsonConverterTest {
      * (Not the empty string "")
      */
     @Test
-    fun testGsonConvertCustomValidationError() {
+    fun testGsonConvertPartlyEmpty() {
         val gson: Gson = GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create()
