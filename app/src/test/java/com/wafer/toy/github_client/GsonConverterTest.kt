@@ -7,9 +7,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 /**
- * Example local unit test, which will execute on the development machine (host).
-
- * @see [Testing documentation](http://d.android.com/tools/testing)
+ * The Gson Converter Test
+ * Test the Gson Converter behavior
  */
 class GsonConverterTest {
 
