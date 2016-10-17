@@ -24,7 +24,7 @@ import java.io.File
 
 object ApiManager {
 
-    private const val BASE_URL: String = "https://api.github.com"
+    private const val BASE_URL: String = "https://api.github.com/"
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
 
     private val client: OkHttpClient by lazy { createOkHttpClient() }
