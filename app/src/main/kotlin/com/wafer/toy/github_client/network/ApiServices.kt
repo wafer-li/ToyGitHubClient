@@ -15,12 +15,12 @@ interface ApiServices {
     /**
      * List the trending repo
      *
-     * @param qualifiers `Map<String, String>` for GitHub repo search **"q"** qualifiers.
+     * @param qualifiers [Map] for GitHub repo search **"q"** qualifiers.
      * The first string MUST be **"q"**
      *
+     * @param defaultMap The default map for sort and order, **DON'T CHANGE IT**
      *
-     * @param defaultMap
-     * The default map for sort and order, **DON'T CHANGE IT**
+     * @return The call object
      */
     @GET("search/repositories")
     fun listTrendingRepo(@QueryMap qualifiers: Map<String, String>,

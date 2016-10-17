@@ -23,9 +23,13 @@ class GsonConverterTest {
      * Test Class: [ValidationError]
      * Empty field: [ValidationError.field] [ValidationError.resource]
      *
-     * Assertion: The class is NOT NULL,
-     *            The class field which has data, is NOT NULL
-     *            The class field which don't have data, will be NULL
+     * Assertion:
+     *
+     * The class is NOT NULL,
+     *
+     * The class field which has data, is NOT NULL
+     *
+     * The class field which don't have data, will be NULL
      *
      * Result: Test PASS
      *
