@@ -1,8 +1,7 @@
-package com.wafer.toy.github_client
+package com.wafer.toy.github_client.model
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import com.wafer.toy.github_client.model.ValidationError
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
