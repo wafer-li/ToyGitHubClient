@@ -40,7 +40,11 @@ import java.util.*
  * @param updatedAt The Date Time of the user updated
  */
 data class User(val login: String, val id: Long, val avatarUrl: String, val type: String,
+
                 val siteAdmin: Boolean, val name: String, val company: String, val blog: String,
+
                 val location: String, val email: String, val hireable: Boolean, val bio: String,
+
                 val publicRepos: Int, val publicGists: Int, val followers: Int, val following: Int,
+
                 val createdAt: Date, val updatedAt: Date)
