@@ -1,4 +1,4 @@
-package com.wafer.toy.github_client.model.entity
+package com.wafer.toy.github_client.model.github_entity
 
 /**
  * The Permissions class
