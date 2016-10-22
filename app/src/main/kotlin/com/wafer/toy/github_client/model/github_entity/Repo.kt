@@ -5,6 +5,8 @@ import java.util.*
 /**
  * The repo data class for gson converter
  *
+ * @author wafer
+ *
  * @param id The id of this repo
  *
  * @param owner The owner of this repo, can be User or Org
@@ -33,7 +35,7 @@ import java.util.*
  *
  * @param defaultBranch Default branch of this repo (Normally is master)
  *
- * @param openIssueCount The count of the open issue
+ * @param openIssuesCount The count of the open issue
  *
  * @param hasIssues Is this repo has issue?
  *
@@ -52,21 +54,71 @@ import java.util.*
  *
  * @param permissions The permission of a org repo
  */
-data class Repo(val id: Long, val owner: User, val name: String, val fullName: String,
-
-                val description: String, val private: Boolean, val fork: Boolean,
-
-                val homepage: String, val language: String,
-
-                val forksCount: Int, val stargazersCount: Int, val watchersCount: Int,
-
-                val size: Long, val defaultBranch: String, val openIssueCount: Int,
-
-                val hasIssues: Boolean, val hasWiki: Boolean, val hasPages: Boolean,
-
-                val hasDownloads: Boolean,
-
-                val pushedAt: Date, val createdAt: Date, val updatedAt: Date,
-
-                val permissions: Permissions)
-
+data class Repo(
+        val stargazersCount: Int?,
+        val pushedAt: Date?,
+        val subscriptionUrl: String?,
+        val language: Any?,
+        val branchesUrl: String?,
+        val issueCommentUrl: String?,
+        val labelsUrl: String?,
+        val subscribersUrl: String?,
+        val permissions: Permissions?,
+        val releasesUrl: String?,
+        val svnUrl: String?,
+        val id: Int?,
+        val archiveUrl: String?,
+        val gitRefsUrl: String?,
+        val forksUrl: String?,
+        val statusesUrl: String?,
+        val sshUrl: String?,
+        val fullName: String?,
+        val size: Int?,
+        val languagesUrl: String?,
+        val htmlUrl: String?,
+        val cloneUrl: String?,
+        val collaboratorsUrl: String?,
+        val name: String?,
+        val pullsUrl: String?,
+        val defaultBranch: String?,
+        val hooksUrl: String?,
+        val treesUrl: String?,
+        val tagsUrl: String?,
+        val private: Boolean?,
+        val contributorsUrl: String?,
+        val hasDownloads: Boolean?,
+        val notificationsUrl: String?,
+        val openIssuesCount: Int?,
+        val description: String?,
+        val createdAt: Date?,
+        val deploymentsUrl: String?,
+        val keysUrl: String?,
+        val hasWiki: Boolean?,
+        val updatedAt: Date?,
+        val commentsUrl: String?,
+        val stargazersUrl: String?,
+        val gitUrl: String?,
+        val hasPages: Boolean?,
+        val owner: User?,
+        val commitsUrl: String?,
+        val compareUrl: String?,
+        val gitCommitsUrl: String?,
+        val blobsUrl: String?,
+        val gitTagsUrl: String?,
+        val mergesUrl: String?,
+        val downloadsUrl: String?,
+        val hasIssues: Boolean?,
+        val url: String?,
+        val contentsUrl: String?,
+        val mirrorUrl: String?,
+        val milestonesUrl: String?,
+        val teamsUrl: String?,
+        val fork: Boolean?,
+        val issuesUrl: String?,
+        val eventsUrl: String?,
+        val issueEventsUrl: String?,
+        val assigneesUrl: String?,
+        val watchersCount: Int?,
+        val homepage: String?,
+        val forksCount: Int?
+)

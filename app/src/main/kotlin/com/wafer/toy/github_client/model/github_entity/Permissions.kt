@@ -1,4 +1,4 @@
-package com.wafer.toy.github_client.model.github_entity
+package com.wafer.toy.github_client.model.github_entity;
 
 /**
  * The Permissions class
@@ -6,5 +6,9 @@ package com.wafer.toy.github_client.model.github_entity
  * @author wafer
  * @since 16/10/21 02:47
  */
+data class Permissions(
+	val pull: Boolean?,
+	val admin: Boolean?,
+	val push: Boolean?
 
-data class Permissions(val admin: Boolean, val push: Boolean, val pull: Boolean)
+)
