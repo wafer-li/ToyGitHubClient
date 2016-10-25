@@ -1,5 +1,6 @@
 package com.wafer.toy.github_client.network
 
+import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -23,16 +24,21 @@ import java.io.File
  */
 
 object ApiManager {
+    private lateinit var context: Context
 
     private const val BASE_URL: String = "https://api.github.com/"
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
 
-    private val client: OkHttpClient by lazy { createOkHttpClient() }
+    private val client: OkHttpClient by lazy { createOkHttpClient(context) }
     private val retrofit: Retrofit by lazy { createRetrofit() }
     private val gson: Gson by lazy { createGson() }
     private val authenticator: Authenticator by lazy { createAuthenticator() }
 
     val services: ApiServices by lazy { createApiServices() }
+
+    fun init(context: Context) {
+        this.context = context.applicationContext
+    }
 
     private fun createApiServices(): ApiServices {
         return retrofit.create(ApiServices::class.java)
@@ -55,11 +61,11 @@ object ApiManager {
                 .create()
     }
 
-    private fun createOkHttpClient(): OkHttpClient {
+    private fun createOkHttpClient(context: Context): OkHttpClient {
         val builder: OkHttpClient.Builder = OkHttpClient.Builder()
 
         initLog(builder)
-        initCache(builder)
+        initCache(builder, context)
         initHeader(builder)
 
         return builder.build()
@@ -91,8 +97,8 @@ object ApiManager {
         }
     }
 
-    private fun initCache(builder: OkHttpClient.Builder) {
-        val cacheDir: File = ToyGitHubClientApplication.appContext.cacheDir
+    private fun initCache(builder: OkHttpClient.Builder, context: Context) {
+        val cacheDir: File = context.cacheDir
         val cache: Cache = Cache(cacheDir, MAX_CACHE_SIZE)
 
         builder.cache(cache)
