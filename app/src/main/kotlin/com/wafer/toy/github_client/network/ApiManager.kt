@@ -5,10 +5,8 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.wafer.toy.github_client.BuildConfig
-import com.wafer.toy.github_client.ToyGitHubClientApplication
-import okhttp3.Cache
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.wafer.toy.github_client.utils.getOAuthKey
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,20 +24,32 @@ import java.io.File
 
 object ApiManager {
     private lateinit var context: Context
-    private set
+        private set
 
     private const val BASE_URL: String = "https://api.github.com/"
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
 
-    private val client: OkHttpClient by lazy { createOkHttpClient(context) }
-    private val retrofit: Retrofit by lazy { createRetrofit() }
+    lateinit var client: OkHttpClient
+
+    lateinit var retrofit: Retrofit
     private val gson: Gson by lazy { createGson() }
-    private val authenticator: Authenticator by lazy { createAuthenticator() }
 
     val services: ApiServices by lazy { createApiServices() }
 
     fun init(context: Context) {
         this.context = context.applicationContext
+        client = createOkHttpClient(context)
+        retrofit = createRetrofit()
+    }
+
+    fun changeClient(client: OkHttpClient) {
+        this.client = client
+
+        retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
     }
 
     private fun createApiServices(): ApiServices {
@@ -70,7 +80,21 @@ object ApiManager {
         initCache(builder, context)
         initHeader(builder)
 
+        initAuthenticator(builder)
+
         return builder.build()
+    }
+
+    private fun initAuthenticator(builder: OkHttpClient.Builder) {
+        val oAuthToken = getOAuthKey(context)
+
+        if (oAuthToken != null) {
+            builder.authenticator { route, response ->
+                response.request().newBuilder()
+                        .addHeader("Authorization", "token" + oAuthToken)
+                        .build()
+            }
+        }
     }
 
     private fun initLog(builder: OkHttpClient.Builder) {
@@ -81,10 +105,6 @@ object ApiManager {
         }
     }
 
-    private fun createAuthenticator(): Authenticator {
-        TODO("check the oauth token to determine which authenticator should use")
-    }
-
     private fun initHeader(builder: OkHttpClient.Builder) {
         builder.addInterceptor { it ->
             val originalRequest: Request = it.request()
@@ -92,7 +112,6 @@ object ApiManager {
             val request: Request = originalRequest.newBuilder()
                     .addHeader("Accept", "application/vnd.github.v3+json")
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("Authentication", authenticator.authToken())
                     .build()
 
             it.proceed(request)
