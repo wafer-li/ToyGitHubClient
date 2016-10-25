@@ -16,15 +16,17 @@ import java.io.File
 
 /**
  * The ApiManager class
- * Please put more info here.
-
+ *
+ * Use for network manage
+ * Init it first
+ *
  * @author wafer
- * *
  * @since 16/10/10 16:18
  */
 
 object ApiManager {
     private lateinit var context: Context
+    private set
 
     private const val BASE_URL: String = "https://api.github.com/"
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
