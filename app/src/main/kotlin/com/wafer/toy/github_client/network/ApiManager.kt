@@ -30,16 +30,18 @@ object ApiManager {
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
 
     lateinit var client: OkHttpClient
-
     lateinit var retrofit: Retrofit
+
     private val gson: Gson by lazy { createGson() }
 
-    val services: ApiServices by lazy { createApiServices() }
+    lateinit var services: ApiServices
 
     fun init(context: Context) {
         this.context = context.applicationContext
+
         client = createOkHttpClient(context)
         retrofit = createRetrofit()
+        services = createApiServices()
     }
 
     fun changeClient(client: OkHttpClient) {
@@ -50,6 +52,8 @@ object ApiManager {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
+
+        services = createApiServices()
     }
 
     private fun createApiServices(): ApiServices {
