@@ -9,6 +9,10 @@ package com.wafer.toy.github_client.model
  * @since 16/10/14 01:50
  */
 
-data class ValidationError(val resource: String?, val field: String?, val code: String?, val message: String?)
+data class ValidationError(val resource: String? = null,
+                           val field: String? = null,
+                           val code: String? = null,
+                           val message: String? = null)
 
-data class ErrorResponse(val message: String, val documentUrl:String?)
+data class ErrorResponse(val message: String? = null,
+                         val documentUrl:String? = null)
