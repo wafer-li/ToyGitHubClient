@@ -1,8 +1,8 @@
 package com.wafer.toy.github_client.network
 
+import com.wafer.toy.github_client.model.AuthRequest
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 
 /**
  * The ApiServices class
@@ -27,4 +27,7 @@ interface ApiServices {
                          @QueryMap defaultMap: Map<String, String>
                          = hashMapOf(Pair("sort", "stars"), Pair("order", "desc")))
     : Call<Any>
+
+    @POST("authorizations")
+    fun login(@Body authRequest: AuthRequest)
 }
