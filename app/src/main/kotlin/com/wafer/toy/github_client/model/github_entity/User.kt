@@ -53,6 +53,10 @@ import java.util.*
  *
  * @param organizationsUrl Hypermedia. The url of the org which this user belongs to. Note that the
  * org is also a **USER**
+ *
+ * @param reposUrl Hypermedia. The url to get the repos of this user
+ *
+ * @param starredUrl Hypermedia. The url to get the repos which this user starred.
  */
 data class User(
         val gistsUrl: String?,
