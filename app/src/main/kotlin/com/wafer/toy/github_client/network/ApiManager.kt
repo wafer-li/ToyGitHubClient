@@ -29,10 +29,10 @@ object ApiManager {
     private lateinit var context: Context
 
     lateinit var client: OkHttpClient
-    private set
+        private set
 
     lateinit var retrofit: Retrofit
-    private set
+        private set
 
     private val gson: Gson by lazy { createGson() }
 
@@ -84,6 +84,7 @@ object ApiManager {
 
         initLog(builder)
         initCache(builder, context)
+        initOfflineCache(builder)
         initHeader(builder)
 
         initAuthenticator(builder)
@@ -91,17 +92,6 @@ object ApiManager {
         return builder.build()
     }
 
-    private fun initAuthenticator(builder: OkHttpClient.Builder) {
-        val oAuthToken = getOAuthKey(context)
-
-        if (oAuthToken != null) {
-            builder.authenticator { route, response ->
-                response.request().newBuilder()
-                        .addHeader("Authorization", "token" + oAuthToken)
-                        .build()
-            }
-        }
-    }
 
     private fun initLog(builder: OkHttpClient.Builder) {
         if (BuildConfig.DEBUG) {
@@ -110,6 +100,7 @@ object ApiManager {
             builder.addInterceptor(loggingInterceptor)
         }
     }
+
 
     private fun initHeader(builder: OkHttpClient.Builder) {
         builder.addInterceptor { it ->
@@ -124,11 +115,28 @@ object ApiManager {
         }
     }
 
+
     private fun initCache(builder: OkHttpClient.Builder, context: Context) {
         val cacheDir: File = context.cacheDir
         val cache: Cache = Cache(cacheDir, MAX_CACHE_SIZE)
 
         builder.cache(cache)
     }
-}
 
+
+    private fun initOfflineCache(builder: OkHttpClient.Builder) {
+    }
+
+
+    private fun initAuthenticator(builder: OkHttpClient.Builder) {
+        val oAuthToken = getOAuthKey(context)
+
+        if (oAuthToken != null) {
+            builder.authenticator { route, response ->
+                response.request().newBuilder()
+                        .addHeader("Authorization", "token" + oAuthToken)
+                        .build()
+            }
+        }
+    }
+}
