@@ -1,8 +1,6 @@
 package com.wafer.toy.github_client
 
 import android.app.Application
-import android.content.Context
-import android.content.res.Resources
 
 /**
  * The ToyGitHubClientApplication class

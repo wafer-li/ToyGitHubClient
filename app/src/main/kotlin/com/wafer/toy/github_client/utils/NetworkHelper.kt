@@ -3,18 +3,15 @@ package com.wafer.toy.github_client.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
-import android.support.v4.net.ConnectivityManagerCompat
 import com.wafer.toy.github_client.constants.AUTH_REQUEST
 import com.wafer.toy.github_client.constants.OAUTH_KEY
 import com.wafer.toy.github_client.constants.SHARED_PREFERENCE_KEY
 import com.wafer.toy.github_client.model.responses.OAuthTokenResponse
 import com.wafer.toy.github_client.network.ApiManager
 import okhttp3.Credentials
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 
 /**
  * The NetworkHelper

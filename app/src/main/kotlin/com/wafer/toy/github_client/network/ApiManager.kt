@@ -5,6 +5,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.wafer.toy.github_client.BuildConfig
+import com.wafer.toy.github_client.network.ApiManager.init
 import com.wafer.toy.github_client.utils.getOAuthToken
 import com.wafer.toy.github_client.utils.isOnline
 import okhttp3.Cache
