@@ -31,7 +31,7 @@ interface ApiServices {
     : Call<Repo>
 
     @POST("authorizations")
-    fun login(username: String, password: String,
+    fun login(@Header("Authorization") basicAuthCredential: String,
               @Header("X-GitHub-OTP") twoFactorAuthorizationCode: String? = null,
               @Body authRequest: AuthRequest)
     : Call<OAuthTokenResponse>

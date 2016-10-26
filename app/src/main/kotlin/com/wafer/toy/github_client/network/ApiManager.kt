@@ -5,9 +5,12 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.wafer.toy.github_client.BuildConfig
-import com.wafer.toy.github_client.utils.getOAuthKey
+import com.wafer.toy.github_client.utils.getOAuthToken
 import com.wafer.toy.github_client.utils.isOnline
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.CacheControl
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,9 +19,9 @@ import java.util.concurrent.TimeUnit
 
 /**
  * The ApiManager class
+ * [init] it first!!
  *
- * Use for network manage
- * Init it first
+ * And then call the properties
  *
  * @author wafer
  * @since 16/10/10 16:18
@@ -30,34 +33,16 @@ object ApiManager {
 
     private lateinit var context: Context
 
-    lateinit var client: OkHttpClient
-        private set
-
-    lateinit var retrofit: Retrofit
-        private set
+    val client: OkHttpClient by lazy { createOkHttpClient(context) }
+    val retrofit: Retrofit by lazy { createRetrofit() }
+    val services: ApiServices by lazy { createApiServices() }
 
     private val gson: Gson by lazy { createGson() }
 
-    lateinit var services: ApiServices
+    var oAuthToken: String = getOAuthToken(context)
 
     fun init(context: Context) {
         this.context = context.applicationContext
-
-        client = createOkHttpClient(context)
-        retrofit = createRetrofit()
-        services = createApiServices()
-    }
-
-    fun changeClient(client: OkHttpClient) {
-        this.client = client
-
-        retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
-
-        services = createApiServices()
     }
 
     private fun createApiServices(): ApiServices {
@@ -151,13 +136,16 @@ object ApiManager {
 
 
     private fun initAuthenticator(builder: OkHttpClient.Builder) {
-        val oAuthToken = getOAuthKey(context)
 
-        if (oAuthToken != null) {
-            builder.authenticator { route, response ->
-                response.request().newBuilder()
-                        .addHeader("Authorization", "token" + oAuthToken)
-                        .build()
+        if (oAuthToken != "") {
+            builder.addInterceptor {
+                val originalRequest = it.request()
+
+                val request = originalRequest.newBuilder()
+                .addHeader("Authorization", "token" + oAuthToken)
+                .build()
+
+                it.proceed(request)
             }
         }
     }
