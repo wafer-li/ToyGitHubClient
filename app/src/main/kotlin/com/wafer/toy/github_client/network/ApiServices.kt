@@ -1,6 +1,7 @@
 package com.wafer.toy.github_client.network
 
 import com.wafer.toy.github_client.model.AuthRequest
+import com.wafer.toy.github_client.model.github_entity.Repo
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -26,7 +27,7 @@ interface ApiServices {
     fun listTrendingRepo(@QueryMap qualifiers: Map<String, String>,
                          @QueryMap defaultMap: Map<String, String>
                          = hashMapOf(Pair("sort", "stars"), Pair("order", "desc")))
-    : Call<Any>
+    : Call<Repo>
 
     @POST("authorizations")
     fun login(@Body authRequest: AuthRequest)
