@@ -27,7 +27,6 @@ object ApiManager {
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
 
     private lateinit var context: Context
-        private set
 
     lateinit var client: OkHttpClient
     private set
