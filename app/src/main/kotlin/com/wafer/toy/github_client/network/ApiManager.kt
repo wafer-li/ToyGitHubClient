@@ -142,7 +142,7 @@ object ApiManager {
                 val originalRequest = it.request()
 
                 val request = originalRequest.newBuilder()
-                .addHeader("Authorization", "token" + oAuthToken)
+                .addHeader("Authorization", "token " + oAuthToken)
                 .build()
 
                 it.proceed(request)
