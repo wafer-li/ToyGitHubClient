@@ -43,7 +43,7 @@ import java.util.*
  *
  * @param hasPages Is this repo has pages?
  *
- * @param hasDownloads Is this repo has downloads?
+ * @param hasDownloads Is this repo enable downloads?
  *
  * @param pushedAt Date Time of the last push. Update when any **commit** was pushed at any **branches**
  *
@@ -53,6 +53,26 @@ import java.util.*
  * @param createdAt Date Time when the repo was created
  *
  * @param permissions The permission of a org repo
+ *
+ * @param htmlUrl Hypermedia, to gain the html page of repo
+ *
+ * @param cloneUrl Hypermedia, The url to clone the repo
+ *
+ * @param branchesUrl Hypermedia, the url to get branches of this repo
+ *
+ * @param commitsUrl Hypermedia, the url to get commits of this repo
+ *
+ * @param contentsUrl Hypermedia, the url to get the **ROOT** content of this repo. You need to specify
+ * the path in the template to get the sub-content
+ *
+ * @param contributorsUrl Hypermedia, the url to get the contributors of this repo. A contributor is
+ * who push commits to the default branch or whose commits was accept in the default branch.
+ *
+ * @param releasesUrl Hypermedia, the release of the repo
+ *
+ * @param issuesUrl Hypermedia, the issues of this repo
+ *
+ * @param forksUrl Hypermedia, the forks of this repo
  */
 data class Repo(
         val stargazersCount: Int?,
