@@ -2,6 +2,7 @@ package com.wafer.toy.github_client.network
 
 import com.wafer.toy.github_client.model.AuthRequest
 import com.wafer.toy.github_client.model.github_entity.Repo
+import com.wafer.toy.github_client.model.responses.OAuthTokenResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -30,5 +31,8 @@ interface ApiServices {
     : Call<Repo>
 
     @POST("authorizations")
-    fun login(@Body authRequest: AuthRequest)
+    fun login(username: String, password: String,
+              @Header("X-GitHub-OTP") twoFactorAuthorizationCode: String? = null,
+              @Body authRequest: AuthRequest)
+    : Call<OAuthTokenResponse>
 }
