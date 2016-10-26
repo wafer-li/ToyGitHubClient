@@ -30,7 +30,9 @@ fun addBasicAuthencation(username: String, password: String): Retrofit {
 
     builder.authenticator { route, response ->
         val credential: String = Credentials.basic(username, password)
-        response.request().newBuilder().addHeader("Authorization", credential).build()
+        response.request().newBuilder()
+                .removeHeader("Authorization")
+                .addHeader("Authorization", credential).build()
     }
 
     ApiManager.changeClient(client)
