@@ -23,14 +23,17 @@ import java.io.File
  */
 
 object ApiManager {
-    private lateinit var context: Context
-        private set
-
     private const val BASE_URL: String = "https://api.github.com/"
     private const val MAX_CACHE_SIZE: Long = 16 * 1024 * 1024
 
+    private lateinit var context: Context
+        private set
+
     lateinit var client: OkHttpClient
+    private set
+
     lateinit var retrofit: Retrofit
+    private set
 
     private val gson: Gson by lazy { createGson() }
 
