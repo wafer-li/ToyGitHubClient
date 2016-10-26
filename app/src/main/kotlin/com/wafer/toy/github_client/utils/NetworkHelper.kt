@@ -2,6 +2,8 @@ package com.wafer.toy.github_client.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.support.v4.net.ConnectivityManagerCompat
 import com.wafer.toy.github_client.constants.AUTH_REQUEST
 import com.wafer.toy.github_client.constants.OAUTH_KEY
 import com.wafer.toy.github_client.constants.SHARED_PREFERENCE_KEY
@@ -22,6 +24,17 @@ import retrofit2.Retrofit
  * @author wafer
  * @since 16/10/25 21:28
  */
+
+fun isOnline(context: Context): Boolean {
+
+    val appContext = context.applicationContext
+
+    val connectivityManager: ConnectivityManager =
+            appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    return connectivityManager.activeNetworkInfo.isConnected
+}
+
 
 fun getOAuthKey(context: Context): String? {
     val preference: SharedPreferences =

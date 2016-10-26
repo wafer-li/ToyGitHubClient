@@ -6,11 +6,13 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.wafer.toy.github_client.BuildConfig
 import com.wafer.toy.github_client.utils.getOAuthKey
+import com.wafer.toy.github_client.utils.isOnline
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 /**
  * The ApiManager class
@@ -83,8 +85,10 @@ object ApiManager {
         val builder: OkHttpClient.Builder = OkHttpClient.Builder()
 
         initLog(builder)
+
         initCache(builder, context)
-        initOfflineCache(builder)
+        initOfflineCache(builder, context)
+
         initHeader(builder)
 
         initAuthenticator(builder)
@@ -124,7 +128,25 @@ object ApiManager {
     }
 
 
-    private fun initOfflineCache(builder: OkHttpClient.Builder) {
+    private fun initOfflineCache(builder: OkHttpClient.Builder, context: Context) {
+        val cacheControl: CacheControl = createCacheControl()
+
+        if (!isOnline(context)) {
+            builder.addInterceptor {
+                val originalRequest = it.request()
+
+                val request = originalRequest.newBuilder()
+                        .cacheControl(cacheControl)
+                        .build()
+
+                it.proceed(request)
+            }
+        }
+    }
+
+    private fun createCacheControl(): CacheControl {
+        val builder: CacheControl.Builder = CacheControl.Builder()
+        return builder.maxStale(7, TimeUnit.DAYS).build()
     }
 
 
