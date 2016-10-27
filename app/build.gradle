@@ -26,6 +26,31 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+
+    lintOptions {
+        // set to true to turn off analysis progress reporting by lint
+        quiet true
+        // if true, stop the gradle build if errors are found
+        abortOnError true
+        // if true, only report errors
+        ignoreWarnings false
+        // if true, emit full/absolute paths to files with errors (true by default)
+        absolutePaths true
+        // if true, show all locations for an error, do not truncate lists, etc.
+        showAll true
+        // if true, generate a text report of issues (false by default)
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
+        // set to true to have all release builds run lint on issues with severity=fatal
+        // and abort the build (controlled by abortOnError above) if fatal issues are found
+        checkReleaseBuilds true
+
+        warning 'InvalidPackage'
+        return void
+    }
+
+
 }
 
 dependencies {
@@ -50,10 +75,7 @@ dependencies {
     compile 'javax.annotation:javax.annotation-api:1.2'
 
     /* Material Drawer */
-    compile('com.mikepenz:materialdrawer:5.7.0@aar') {
+    compile('com.mikepenz:materialdrawer:5.6.0@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:materialize:1.0.0@aar'
-    compile 'com.mikepenz:iconics-core:2.8.1@aar'
-    compile 'com.mikepenz:fastadapter:2.0.0@aar'
 }
