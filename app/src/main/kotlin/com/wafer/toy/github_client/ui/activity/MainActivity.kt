@@ -5,6 +5,7 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.wafer.toy.github_client.R
+import com.wafer.toy.github_client.utils.getScreenSizeDp
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
@@ -27,8 +28,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initDrawer(): Drawer {
+
+        val drawerWidth = getScreenSizeDp(this).first * 0.7
+
         return DrawerBuilder()
                 .withActivity(this)
+                .withDrawerWidthDp(drawerWidth.toInt())
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggle(true)
                 .withAccountHeader(accountHeader)
@@ -41,5 +46,4 @@ class MainActivity : BaseActivity() {
                 .withHeaderBackground(R.drawable.account_header_background)
                 .build()
     }
-
 }
