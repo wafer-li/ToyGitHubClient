@@ -10,3 +10,9 @@ package com.wafer.toy.github_client.constants
 private const val PREFIX = "toy_github_client_"
 
 const val OAUTH_KEY = PREFIX + "oauth_key"
+
+const val FULL_NAME_KEY = PREFIX + "full_name"
+
+const val LOGIN_NAME_KEY = PREFIX + "login_key"
+
+const val USER_LOGO_KEY = PREFIX + "user_logo"
