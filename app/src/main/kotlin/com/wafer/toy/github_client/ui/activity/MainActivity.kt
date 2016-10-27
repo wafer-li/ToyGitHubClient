@@ -6,7 +6,6 @@ import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.wafer.toy.github_client.R
-import com.wafer.toy.github_client.utils.getOAuthToken
 import com.wafer.toy.github_client.utils.getScreenSizeDp
 import com.wafer.toy.github_client.utils.getTintDefaultProfileIcon
 import com.wafer.toy.github_client.utils.getUserNameAndLogoUrl

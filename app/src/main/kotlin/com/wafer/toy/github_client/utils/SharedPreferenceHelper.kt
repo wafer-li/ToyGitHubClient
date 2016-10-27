@@ -6,7 +6,6 @@ import com.wafer.toy.github_client.constants.FULL_NAME_KEY
 import com.wafer.toy.github_client.constants.OAUTH_KEY
 import com.wafer.toy.github_client.constants.SHARED_PREFERENCE_KEY
 import com.wafer.toy.github_client.constants.USER_LOGO_KEY
-import com.wafer.toy.github_client.model.github_entity.User
 
 /**
  * The SharedPreferenceHelper class
