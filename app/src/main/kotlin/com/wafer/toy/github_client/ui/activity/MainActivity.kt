@@ -8,6 +8,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.wafer.toy.github_client.R
 import com.wafer.toy.github_client.utils.getOAuthToken
 import com.wafer.toy.github_client.utils.getScreenSizeDp
+import com.wafer.toy.github_client.utils.getTintDefaultProfileIcon
 import com.wafer.toy.github_client.utils.getUserNameAndLogoUrl
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -47,6 +48,7 @@ class MainActivity : BaseActivity() {
     private fun initAccountHeader(): AccountHeader {
         return AccountHeaderBuilder()
                 .withActivity(this)
+                .withSelectionListEnabledForSingleProfile(false)
                 .addProfiles(profileItem)
                 .withHeaderBackground(R.drawable.account_header_background)
                 .build()
@@ -61,7 +63,9 @@ class MainActivity : BaseActivity() {
                     .withIcon(nameAndLogoUrl.second)
         }
         else {
+            val icon = getTintDefaultProfileIcon(this)
             return ProfileDrawerItem()
+            .withIcon(icon)
         }
     }
 }
