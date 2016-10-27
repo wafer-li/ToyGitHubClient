@@ -48,7 +48,12 @@ dependencies {
     /* Gson */
     compile 'com.google.code.gson:gson:2.7'
     compile 'javax.annotation:javax.annotation-api:1.2'
-}
-repositories {
-    jcenter()
+
+    /* Material Drawer */
+    compile('com.mikepenz:materialdrawer:5.7.0@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:materialize:1.0.0@aar'
+    compile 'com.mikepenz:iconics-core:2.8.1@aar'
+    compile 'com.mikepenz:fastadapter:2.0.0@aar'
 }
