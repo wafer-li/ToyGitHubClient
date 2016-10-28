@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ToyGitHubClient</string>
+    <string name="click_to_login">点击图标登录</string>
+    <string name="unknown_user">未知用户</string>
+</resources>
