@@ -6,8 +6,6 @@ import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.wafer.toy.github_client.R
-import com.wafer.toy.github_client.utils.getScreenSizeDp
-import com.wafer.toy.github_client.utils.getTintDefaultProfileIcon
 import com.wafer.toy.github_client.utils.getUserNameAndLogoUrl
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,12 +30,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initDrawer(): Drawer {
-
-        val drawerWidth = getScreenSizeDp(this).first * 0.7
-
         return DrawerBuilder()
                 .withActivity(this)
-                .withDrawerWidthDp(drawerWidth.toInt())
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggle(true)
                 .withAccountHeader(accountHeader)
@@ -49,7 +43,7 @@ class MainActivity : BaseActivity() {
                 .withActivity(this)
                 .withSelectionListEnabledForSingleProfile(false)
                 .addProfiles(profileItem)
-                .withHeaderBackground(R.drawable.account_header_background)
+                .withHeaderBackground(R.color.primary)
                 .build()
     }
 
@@ -60,11 +54,11 @@ class MainActivity : BaseActivity() {
             return ProfileDrawerItem()
                     .withName(nameAndLogoUrl.first)
                     .withIcon(nameAndLogoUrl.second)
-        }
-        else {
-            val icon = getTintDefaultProfileIcon(this)
+        } else {
             return ProfileDrawerItem()
-            .withIcon(icon)
+                    .withName(getString(R.string.unknown_user))
+                    .withEmail(getString(R.string.click_to_login))
+                    .withIcon(R.drawable.default_user_icon)
         }
     }
 }
