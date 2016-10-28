@@ -73,9 +73,4 @@ dependencies {
     /* Gson */
     compile 'com.google.code.gson:gson:2.7'
     compile 'javax.annotation:javax.annotation-api:1.2'
-
-    /* Material Drawer */
-    compile ('com.mikepenz:materialdrawer:5.7.0@aar') {
-        transitive = true
-    }
 }
