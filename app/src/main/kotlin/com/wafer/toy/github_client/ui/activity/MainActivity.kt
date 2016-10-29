@@ -1,5 +1,6 @@
 package com.wafer.toy.github_client.ui.activity
 
+import android.support.v7.app.ActionBarDrawerToggle
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -14,7 +15,6 @@ class MainActivity : BaseActivity() {
     private val drawer: Drawer by lazy { initDrawer() }
     private val accountHeader: AccountHeader by lazy { initAccountHeader() }
     private val profileItem: ProfileDrawerItem by lazy { initProfileItem() }
-
 
     override fun initView() {
         initToolbar()
@@ -34,6 +34,7 @@ class MainActivity : BaseActivity() {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(accountHeader)
                 .build()
     }
