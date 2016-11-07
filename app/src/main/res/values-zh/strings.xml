@@ -3,4 +3,5 @@
     <string name="app_name">ToyGitHubClient</string>
     <string name="click_to_login">点击图标登录</string>
     <string name="unknown_user">未知用户</string>
+    <string name="dashboard">通知板</string>
 </resources>

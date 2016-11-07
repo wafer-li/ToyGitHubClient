@@ -3,4 +3,6 @@
 
     <string name="unknown_user">Unknown User</string>
     <string name="click_to_login">Click Icon to login</string>
+    <string name="trending" translatable="false">Trending</string>
+    <string name="dashboard">Dashboard</string>
 </resources>
