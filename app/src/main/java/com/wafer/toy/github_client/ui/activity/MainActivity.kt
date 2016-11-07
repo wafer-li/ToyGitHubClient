@@ -9,6 +9,7 @@ import com.wafer.toy.github_client.R
 import com.wafer.toy.github_client.constants.MAIN_DASHBOARD
 import com.wafer.toy.github_client.constants.MAIN_EXPLORER
 import com.wafer.toy.github_client.utils.getActionBarSize
+import com.wafer.toy.github_client.utils.getOAuthToken
 import com.wafer.toy.github_client.utils.getScreenSizePx
 import com.wafer.toy.github_client.utils.getUserNameAndLogoUrl
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,11 +46,10 @@ class MainActivity : BaseActivity() {
     }
 
     private fun getActivityMode(): Int {
+        val oAuthToken = getOAuthToken(this)
 
-        val modeBundle = getExtraBundles()
-
-        if (modeBundle != null) {
-            return modeBundle.getInt("mode")
+        if (oAuthToken != "") {
+            return MAIN_DASHBOARD
         }
 
         return MAIN_EXPLORER
