@@ -17,7 +17,7 @@ class MainActivity : BaseActivity() {
     private val accountHeader: AccountHeader by lazy { initAccountHeader() }
     private val profileItem: ProfileDrawerItem by lazy { initProfileItem() }
 
-    override fun initView() {
+    override fun init() {
         initToolbar()
         drawer
     }

@@ -13,13 +13,13 @@ import android.support.v7.app.AppCompatActivity
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    abstract fun initView()
+    abstract fun init()
     abstract fun getLayoutRes(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutRes())
-        initView()
+        init()
     }
 
     protected fun goToActivity(clazz: Class<*>, bundle: Bundle? = null, vararg flags: Int = intArrayOf()) {
