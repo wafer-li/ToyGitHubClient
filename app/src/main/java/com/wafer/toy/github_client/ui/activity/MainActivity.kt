@@ -4,6 +4,7 @@ import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.wafer.toy.github_client.R
 import com.wafer.toy.github_client.constants.MAIN_DASHBOARD
@@ -64,6 +65,7 @@ class MainActivity : BaseActivity() {
                 .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(accountHeader)
+                .addDrawerItems(*initDrawerItem())
 
         val actionBarSize = getActionBarSize(this)
         if (actionBarSize != null) {
@@ -97,4 +99,26 @@ class MainActivity : BaseActivity() {
                     .withIcon(R.drawable.default_user_icon)
         }
     }
+
+    private fun initDrawerItem(): Array<PrimaryDrawerItem> {
+        val list: MutableList<PrimaryDrawerItem> = mutableListOf()
+
+        if (mode != MAIN_EXPLORER) {
+            val optionList = resources.getStringArray(R.array.dashboard_options)
+
+            for (i in optionList.indices) {
+                list.add(PrimaryDrawerItem().withName(optionList[i]).withIdentifier(i.toLong()))
+            }
+
+        } else {
+            val languageList = resources.getStringArray(R.array.default_languages)
+
+            for (i in languageList.indices) {
+                list.add(PrimaryDrawerItem().withName(languageList[i]).withIdentifier(i.toLong()))
+            }
+        }
+
+        return list.toTypedArray()
+    }
+
 }
