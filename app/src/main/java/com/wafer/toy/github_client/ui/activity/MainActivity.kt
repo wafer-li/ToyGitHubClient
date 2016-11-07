@@ -6,6 +6,8 @@ import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.wafer.toy.github_client.R
+import com.wafer.toy.github_client.constants.MAIN_DASHBOARD
+import com.wafer.toy.github_client.constants.MAIN_EXPLORER
 import com.wafer.toy.github_client.utils.getActionBarSize
 import com.wafer.toy.github_client.utils.getScreenSizePx
 import com.wafer.toy.github_client.utils.getUserNameAndLogoUrl
@@ -16,18 +18,41 @@ class MainActivity : BaseActivity() {
     private val drawer: Drawer by lazy { initDrawer() }
     private val accountHeader: AccountHeader by lazy { initAccountHeader() }
     private val profileItem: ProfileDrawerItem by lazy { initProfileItem() }
+    private val mode: Int by lazy { getActivityMode() }
+
 
     override fun init() {
         initToolbar()
         drawer
     }
 
-    private fun initToolbar() {
-        setSupportActionBar(toolbar)
-    }
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_main
+    }
+
+
+    private fun initToolbar() {
+
+        when (mode) {
+            MAIN_EXPLORER ->
+                toolbar.title = getString(R.string.trending)
+            MAIN_DASHBOARD ->
+                toolbar.title = getString(R.string.trending)
+        }
+
+        setSupportActionBar(toolbar)
+    }
+
+    private fun getActivityMode(): Int {
+
+        val modeBundle = getExtraBundles()
+
+        if (modeBundle != null) {
+            return modeBundle.getInt("mode")
+        }
+
+        return MAIN_EXPLORER
     }
 
     private fun initDrawer(): Drawer {

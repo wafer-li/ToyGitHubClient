@@ -1,5 +1,6 @@
 package com.wafer.toy.github_client.ui.activity
 
+import android.os.Bundle
 import android.os.Handler
 import com.wafer.toy.github_client.R
 import com.wafer.toy.github_client.constants.MAIN_DASHBOARD
@@ -18,11 +19,15 @@ class SplashActivity : BaseActivity() {
     private fun checkOAuthToken() {
         val oAuthToken = getOAuthToken(this)
 
+        val modeBundle: Bundle = Bundle()
+
         if (oAuthToken == "") {
-            goToActivity(MainActivity::class.java, flags = MAIN_EXPLORER)
+            modeBundle.putInt("mode", MAIN_EXPLORER)
         }
         else {
-            goToActivity(MainActivity::class.java, flags = MAIN_DASHBOARD)
+            modeBundle.putInt("mode", MAIN_DASHBOARD)
         }
+
+        goToActivity(MainActivity::class.java, modeBundle)
     }
 }
