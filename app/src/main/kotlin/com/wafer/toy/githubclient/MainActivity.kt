@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                .apply {
+                    isDrawerSlideAnimationEnabled = false
+                }
+
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
