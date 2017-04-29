@@ -37,11 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         val isLogin = pref.getString(Constants.PREF_OAUTH_TOKEN, null).isNullOrEmpty().not()
 
-        val pagerAdapter =
-                if (isLogin)
-                    MainPagerAdapter(supportFragmentManager, PageIndicator.MAIN, this)
-                else
-                    MainPagerAdapter(supportFragmentManager, PageIndicator.TRENDING, this)
+        val pagerAdapter = MainPagerAdapter(supportFragmentManager, applicationContext)
+
+        pagerAdapter.indicator = if (isLogin) PageIndicator.MAIN else PageIndicator.TRENDING
 
         view_pager.adapter = pagerAdapter
 
