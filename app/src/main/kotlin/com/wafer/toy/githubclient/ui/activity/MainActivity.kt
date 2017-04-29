@@ -63,9 +63,11 @@ class MainActivity : AppCompatActivity() {
         when (indicator) {
             PageIndicator.MAIN -> {
                 fab.visibility = View.VISIBLE
+                toolbar.title = getString(R.string.app_name)
             }
             PageIndicator.TRENDING -> {
                 fab.visibility = View.GONE
+                toolbar.title = getString(R.string.title_trending)
             }
         }
     }
