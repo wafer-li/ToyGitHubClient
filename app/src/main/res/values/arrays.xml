@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_tab_titles">
+        <item>@string/title_tab_dashboard</item>
+        <item>@string/title_tab_repos</item>
+    </string-array>
+
+    <string-array name="trending_tab_titles">
+        <item>@string/title_tab_today</item>
+        <item>@string/title_tab_this_week</item>
+        <item>@string/title_tab_this_month</item>
+    </string-array>
+</resources>
