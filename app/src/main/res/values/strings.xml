@@ -1,13 +1,9 @@
 <resources>
     <string name="app_name">ToyGitHubClient</string>
 
+    <!-- Titles -->
     <string name="title_trending">Trending</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="action_exit">Exit</string>
+    <string name="title_login">Login</string>
 
     <!-- Tabs Title -->
     <string name="title_tab_dashboard">DashBoard</string>
@@ -16,4 +12,12 @@
     <string name="title_tab_today">Today</string>
     <string name="title_tab_this_week">This Week</string>
     <string name="title_tab_this_month">This Month</string>
+
+    <!-- Actions -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_exit">Exit</string>
+
 </resources>
