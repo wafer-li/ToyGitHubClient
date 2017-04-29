@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">ToyGitHubClient</string>
 
+    <!-- Content Description -->
+    <string name="content_des_github_icon" translatable="false">GitHub Icon</string>
+
     <!-- Titles -->
     <string name="title_trending">Trending</string>
     <string name="title_login">Login</string>
