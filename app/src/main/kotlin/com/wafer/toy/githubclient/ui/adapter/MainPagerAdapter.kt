@@ -9,6 +9,7 @@ import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.ui.activity.MainActivity
 import com.wafer.toy.githubclient.ui.fragment.NestedContentFragment
+import kotlin.properties.Delegates
 
 /**
  * The MainPagerAdapter class
@@ -17,25 +18,27 @@ import com.wafer.toy.githubclient.ui.fragment.NestedContentFragment
  * @since 17/4/29 19:39
  */
 
-class MainPagerAdapter(fm: FragmentManager, indicator: MainActivity.PageIndicator, context: Context)
-    : FragmentPagerAdapter(fm) {
+class MainPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerAdapter(fm) {
 
-    private val titles = when (indicator) {
-        MainActivity.PageIndicator.MAIN ->
-            context.resources.getStringArray(R.array.main_tab_titles)
-        MainActivity.PageIndicator.TRENDING ->
-            context.resources.getStringArray(R.array.trending_tab_titles)
-    }!!
-
-    private val fragments =
-            titles.map {
-                NestedContentFragment()
-                        .apply {
-                            val args = Bundle().apply { putString(Constants.PAGE_TITLE, it) }
-                            arguments = args
-                        }
+    var indicator by Delegates.observable(MainActivity.PageIndicator.TRENDING) { _, _, newValue ->
+        when (newValue) {
+            MainActivity.PageIndicator.MAIN -> {
+                titles = context.resources.getStringArray(R.array.main_tab_titles)
             }
 
+            MainActivity.PageIndicator.TRENDING -> {
+                titles = context.resources.getStringArray(R.array.trending_tab_titles)
+            }
+        }
+
+        fragments = titles.map {
+            val args = Bundle().apply { putString(Constants.PAGE_TITLE, it) }
+            NestedContentFragment().apply { arguments = args }
+        }
+    }
+
+    private lateinit var titles: Array<out String>
+    private lateinit var fragments: List<Fragment>
 
     override fun getItem(position: Int): Fragment = fragments[position]
 
