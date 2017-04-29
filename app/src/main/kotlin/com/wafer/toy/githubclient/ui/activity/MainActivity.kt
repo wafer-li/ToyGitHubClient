@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     var indicator = PageIndicator.TRENDING
-    val pagerAdapter = MainPagerAdapter(supportFragmentManager, applicationContext)
+    lateinit var pagerAdapter: MainPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +36,29 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         nav_view_bottom.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
-        view_pager.adapter = pagerAdapter
-        tabs.setupWithViewPager(view_pager)
+
 
         val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
 
         val isLogin = pref.getString(Constants.PREF_OAUTH_TOKEN, null).isNullOrEmpty().not()
 
         indicator = if (isLogin) PageIndicator.MAIN else PageIndicator.TRENDING
+
+        pagerAdapter = MainPagerAdapter(supportFragmentManager, applicationContext)
+
+        pagerAdapter.indicator = indicator  //Init the indicator
         updatePageState(indicator)
+
+        view_pager.adapter = pagerAdapter
+        tabs.setupWithViewPager(view_pager)
     }
 
     private fun updatePageState(indicator: PageIndicator) {
-        pagerAdapter.indicator = indicator
-        pagerAdapter.notifyDataSetChanged()
+
+        if (pagerAdapter.indicator != indicator) {
+            pagerAdapter.indicator = indicator
+            pagerAdapter.notifyDataSetChanged()
+        }
 
         when (indicator) {
             PageIndicator.MAIN -> {
