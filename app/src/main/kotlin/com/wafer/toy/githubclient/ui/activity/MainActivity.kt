@@ -6,6 +6,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.ui.adapter.MainPagerAdapter
@@ -44,6 +45,15 @@ class MainActivity : AppCompatActivity() {
         view_pager.adapter = pagerAdapter
 
         tabs.setupWithViewPager(view_pager)
+
+        updateFab(pagerAdapter.indicator)
+    }
+
+    private fun updateFab(indicator: PageIndicator) {
+        when (indicator) {
+            PageIndicator.MAIN -> fab.visibility = View.GONE
+            PageIndicator.TRENDING -> fab.visibility = View.VISIBLE
+        }
     }
 
     override fun onBackPressed() {
