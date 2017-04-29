@@ -1,8 +1,8 @@
 package com.wafer.toy.githubclient.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         nav_view_bottom.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
         nav_view.getHeaderView(0).imageView.setOnClickListener {
-            // TODO Login View
-            Snackbar.make(it, "clicked", Snackbar.LENGTH_LONG).show()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
