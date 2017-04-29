@@ -62,10 +62,10 @@ class MainActivity : AppCompatActivity() {
 
         when (indicator) {
             PageIndicator.MAIN -> {
-                fab.visibility = View.GONE
+                fab.visibility = View.VISIBLE
             }
             PageIndicator.TRENDING -> {
-                fab.visibility = View.VISIBLE
+                fab.visibility = View.GONE
             }
         }
     }
