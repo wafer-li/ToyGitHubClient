@@ -1,4 +1,4 @@
-package com.wafer.toy.githubclient.network
+package com.wafer.toy.githubclient.network.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -11,11 +11,11 @@ import okhttp3.Response
  */
 class AuthenticationInterceptor(val authToken: String) : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain?): Response? {
+    override fun intercept(chain: Interceptor.Chain?): Response {
         val originRequest = chain?.request()
 
         val builder = originRequest?.newBuilder()?.header("Authorization", authToken)
 
-        return chain?.proceed(builder?.build())
+        return chain!!.proceed(builder?.build())
     }
 }

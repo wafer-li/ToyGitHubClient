@@ -7,8 +7,13 @@ package com.wafer.toy.githubclient.application
  */
 
 object Constants {
+
+    const val APP_NAME = "ToyGitHubClient"
+
     const val PREF_NAME = "com.wafer.toy.githubclient.ToyGitHubClient"
     const val PREF_OAUTH_TOKEN = "PREF_OAUTH_TOKEN"
 
     const val PAGE_TITLE = "PAGE_TITLE"
+
+    const val PREF_CACHE_SIZE = "PREF_CACHE_SIZE"
 }
