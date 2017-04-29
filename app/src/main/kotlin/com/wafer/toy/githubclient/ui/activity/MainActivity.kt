@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         MAIN, TRENDING
     }
 
+    var indicator = PageIndicator.TRENDING
+    val pagerAdapter = MainPagerAdapter(supportFragmentManager, applicationContext)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,26 +36,28 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         nav_view_bottom.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
+        view_pager.adapter = pagerAdapter
+        tabs.setupWithViewPager(view_pager)
 
         val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
 
         val isLogin = pref.getString(Constants.PREF_OAUTH_TOKEN, null).isNullOrEmpty().not()
 
-        val pagerAdapter = MainPagerAdapter(supportFragmentManager, applicationContext)
-
-        pagerAdapter.indicator = if (isLogin) PageIndicator.MAIN else PageIndicator.TRENDING
-
-        view_pager.adapter = pagerAdapter
-
-        tabs.setupWithViewPager(view_pager)
-
-        updateFab(pagerAdapter.indicator)
+        indicator = if (isLogin) PageIndicator.MAIN else PageIndicator.TRENDING
+        updatePageState(indicator)
     }
 
-    private fun updateFab(indicator: PageIndicator) {
+    private fun updatePageState(indicator: PageIndicator) {
+        pagerAdapter.indicator = indicator
+        pagerAdapter.notifyDataSetChanged()
+
         when (indicator) {
-            PageIndicator.MAIN -> fab.visibility = View.GONE
-            PageIndicator.TRENDING -> fab.visibility = View.VISIBLE
+            PageIndicator.MAIN -> {
+                fab.visibility = View.GONE
+            }
+            PageIndicator.TRENDING -> {
+                fab.visibility = View.VISIBLE
+            }
         }
     }
 
