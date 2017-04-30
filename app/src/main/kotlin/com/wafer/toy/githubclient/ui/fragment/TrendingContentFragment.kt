@@ -38,6 +38,8 @@ class TrendingContentFragment : Fragment() {
     private val trendingCards = mutableListOf<TrendingCard>()
     private val trendingContentAdapter = TrendingContentAdapter(trendingCards)
 
+    private var isLoaded = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
@@ -108,17 +110,21 @@ class TrendingContentFragment : Fragment() {
                 .subscribe(object : Observer<TrendingCard> {
                     override fun onSubscribe(d: Disposable?) {
                         Log.d("Subscribe", "S!")
-                        trendingCards.clear()
+
+                        if (!isLoaded)
+                            trendingCards.clear()
+
                     }
 
                     override fun onComplete() {
                         Log.d("Complete", "C!")
                         trendingContentAdapter.notifyDataSetChanged()
+                        isLoaded = true
                     }
 
                     override fun onNext(t: TrendingCard?) {
                         Log.d("Next", "N!")
-                        if (t != null) {
+                        if (t != null && !isLoaded) {
                             trendingCards.add(t)
                         }
                     }
