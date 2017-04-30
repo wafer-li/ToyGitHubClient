@@ -93,6 +93,7 @@ class TrendingContentFragment : Fragment() {
                             }
 
                     val starsTimeInterval = it.select("span.float-right").first().text()
+                            .filterNot { it == ',' }
 
                     val repo = Repo(
                             fullName = repoTitle,
