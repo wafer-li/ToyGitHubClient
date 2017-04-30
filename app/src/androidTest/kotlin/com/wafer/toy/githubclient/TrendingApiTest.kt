@@ -47,6 +47,12 @@ class TrendingApiTest {
         testSubscriber.awaitTerminalEvent()
 
         testSubscriber.assertComplete().assertNoErrors()
-        assertThat(testSubscriber.values().all { it.isSuccessful && it.body().string().contains("Trending  repositories on GitHub this month") }, `is`(true))
+        assertThat(
+                testSubscriber.values().all {
+                    it.isSuccessful && it.body().string().contains("Trending  repositories on GitHub this month")
+                },
+                `is`(true)
+        )
+
     }
 }
