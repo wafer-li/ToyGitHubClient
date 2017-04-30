@@ -21,13 +21,14 @@ class TrendingContentFragment : Fragment() {
 
     private lateinit var pageTitle: String
 
-    private val trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
+    private lateinit var trendingTitles: Array<out String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
-        val date = getPushedDate(trendingTitles.indexOf(pageTitle))
+        trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
 
+        val date = getPushedDate(trendingTitles.indexOf(pageTitle))
     }
 
 
