@@ -2,15 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-        >
+              android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:id="@+id/card_view"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="@dimen/default_card_content_padding"
+            card_view:cardElevation="@dimen/cardview_default_elevation">
 
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
