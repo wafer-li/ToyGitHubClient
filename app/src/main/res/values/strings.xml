@@ -13,7 +13,7 @@
     <string name="content_des_star_icon">Star Icon</string>
     <string name="content_des_source_fork_icon">Source Fork Icon</string>
     <string name="content_des_language_icon">Programming Language Icon</string>
-    <string name="content_des_avatar_icon">%1$ Avatar Icon</string>
+    <string name="content_des_avatar_icon">%1$s$ Avatar Icon</string>
 
     <!-- Titles -->
     <string name="title_trending">Trending</string>
