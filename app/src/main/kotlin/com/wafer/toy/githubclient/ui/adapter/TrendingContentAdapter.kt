@@ -1,5 +1,6 @@
 package com.wafer.toy.githubclient.ui.adapter
 
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,11 @@ class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
         }
 
         fun bindContributors(contributors: List<User>) {
-            // TODO Need Image lib
+            val adapter = TrendingContributorAdapter(contributors)
+            itemView.authors_recycler.layoutManager =
+                    LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+
+            itemView.authors_recycler.adapter = adapter
         }
     }
 

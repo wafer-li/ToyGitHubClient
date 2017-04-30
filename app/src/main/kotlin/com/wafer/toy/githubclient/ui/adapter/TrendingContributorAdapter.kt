@@ -4,8 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.model.network.User
+import kotlinx.android.synthetic.main.repo_card_contributor.view.*
 
 /**
  * The TrendingContributorAdapter
@@ -17,7 +19,14 @@ class TrendingContributorAdapter(val contributors: List<User>)
     : RecyclerView.Adapter<TrendingContributorAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindImage(contributors: List<User>) {
+        fun bindImage(contributor: User) {
+            itemView.contributor_avatar.contentDescription =
+                    itemView.context.resources.getString(R.string.content_des_avatar_icon)
+                            .format(contributor.userName)
+
+            Glide.with(itemView.context)
+                    .load(contributor.avatarUrl)
+                    .into(itemView.contributor_avatar)
         }
     }
 
@@ -28,7 +37,7 @@ class TrendingContributorAdapter(val contributors: List<User>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        holder?.bindImage(contributors[position])
     }
 
     override fun getItemCount(): Int = contributors.size
