@@ -44,11 +44,16 @@ class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
 
             itemView.authors_recycler.adapter = adapter
         }
+
+        fun bindStarsTimeInterval(starsTimeInterval: String) {
+            itemView.stars_time_interval.text = starsTimeInterval
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bindRepoInfo(trendingCards[position].repo)
         holder?.bindContributors(trendingCards[position].contributors)
+        holder?.bindStarsTimeInterval(trendingCards[position].starsTimeInterval)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

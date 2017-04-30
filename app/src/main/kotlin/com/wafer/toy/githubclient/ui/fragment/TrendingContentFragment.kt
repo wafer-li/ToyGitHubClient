@@ -92,6 +92,8 @@ class TrendingContentFragment : Fragment() {
                                 User(userName = userName, avatarUrl = avatarUrl)
                             }
 
+                    val starsTimeInterval = it.select("span.float-right").first().text()
+
                     val repo = Repo(
                             fullName = repoTitle,
                             name = repoTitle.split("/")[1],
@@ -100,7 +102,7 @@ class TrendingContentFragment : Fragment() {
                             stargazersCount = stars,
                             forksCount = forks)
 
-                    TrendingCard(repo, contributors)
+                    TrendingCard(repo, contributors, starsTimeInterval)
                 }
                 .subscribe(object : Observer<TrendingCard> {
                     override fun onSubscribe(d: Disposable?) {
