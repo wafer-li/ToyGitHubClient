@@ -42,7 +42,6 @@
                     android:layout_marginTop="7dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_name"
                     android:textAppearance="@android:style/TextAppearance.Material.Small"
-                    android:layout_marginLeft="0dp"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline4"/>
 
             <android.support.constraint.Guideline
@@ -67,10 +66,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_menu_settings"
-                    android:id="@+id/imageView12"
+                    android:id="@+id/language_icon"
                     android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_descprition"
-                    app:layout_constraintRight_toLeftOf="@+id/textView14"
+                    app:layout_constraintRight_toLeftOf="@+id/language"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline4"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintHorizontal_bias="0.0"/>
@@ -79,10 +78,10 @@
                     android:text="TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView14"
-                    android:layout_marginTop="28dp"
+                    android:id="@+id/language"
+                    android:layout_marginTop="27dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_descprition"
-                    app:layout_constraintLeft_toRightOf="@+id/imageView12"
+                    app:layout_constraintLeft_toRightOf="@+id/language_icon"
                     app:layout_constraintRight_toLeftOf="@+id/guideline2"
                     android:layout_marginRight="8dp"
                     android:layout_marginLeft="4dp"
@@ -94,10 +93,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_menu_settings"
-                    android:id="@+id/imageView13"
+                    android:id="@+id/star_icon"
                     android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_descprition"
-                    app:layout_constraintRight_toLeftOf="@+id/textView15"
+                    app:layout_constraintRight_toLeftOf="@+id/star_count"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline2"
                     app:layout_constraintHorizontal_bias="0.34"
                     app:layout_constraintHorizontal_chainStyle="packed"/>
@@ -106,10 +105,10 @@
                     android:text="TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView15"
+                    android:id="@+id/star_count"
                     android:layout_marginTop="28dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_descprition"
-                    app:layout_constraintLeft_toRightOf="@+id/imageView13"
+                    app:layout_constraintLeft_toRightOf="@+id/star_icon"
                     app:layout_constraintRight_toLeftOf="@+id/guideline3"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"/>
@@ -127,11 +126,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_menu_settings"
-                    android:id="@+id/imageView14"
+                    android:id="@+id/fork_icon"
                     android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_descprition"
-                    app:layout_constraintRight_toLeftOf="@+id/textView16"
-                    android:layout_marginLeft="0dp"
+                    app:layout_constraintRight_toLeftOf="@+id/fork_count"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline3"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintHorizontal_bias="0.32"/>
@@ -140,13 +138,13 @@
                     android:text="TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView16"
-                    app:layout_constraintLeft_toRightOf="@+id/imageView14"
+                    android:id="@+id/fork_count"
+                    app:layout_constraintLeft_toRightOf="@+id/fork_icon"
                     android:layout_marginTop="28dp"
                     app:layout_constraintTop_toBottomOf="@+id/repo_descprition"
                     app:layout_constraintRight_toLeftOf="@+id/guideline5"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginLeft="4dp"/>
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"/>
 
             <android.support.constraint.Guideline
                     android:layout_width="wrap_content"
@@ -156,6 +154,36 @@
                     app:layout_constraintGuide_percent="0.98"
                     tools:layout_editor_absoluteY="25dp"
                     tools:layout_editor_absoluteX="353dp"/>
+
+            <TextView
+                    android:text="Built By: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView17"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@+id/language_icon"
+                    android:layout_marginLeft="0dp"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideline4"/>
+
+            <android.support.v7.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@+id/textView17"
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/authors_recycler"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@+id/star_icon"/>
+
+            <Button
+                    android:text="Star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/star_button"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideline3"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@+id/fork_icon"
+                    android:theme="@style/AppTheme.Button.Colored"/>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

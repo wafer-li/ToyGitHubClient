@@ -10,7 +10,8 @@
 
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button">
         <item name="colorButtonNormal">?attr/colorPrimary</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Colored
+        <item name="android:textAppearanceButton">
+            @style/TextAppearance.AppCompat.Widget.Button.Colored
         </item>
     </style>
 

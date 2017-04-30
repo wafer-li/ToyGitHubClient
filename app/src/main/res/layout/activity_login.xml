@@ -37,7 +37,7 @@
             app:layout_constraintTop_toBottomOf="@+id/password"
             app:layout_constraintHorizontal_bias="0.0"
             android:theme="@style/AppTheme.Button.Colored"
-            style="@style/AppTheme.Button.Colored"/>
+            />
 
     <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
