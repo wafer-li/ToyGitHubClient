@@ -29,8 +29,8 @@ import kotlin.properties.Delegates
  */
 object ApiManager {
 
-    const val BASE_URL = "https://api.github.com"
-    const val BASE_TRENDING_URL = "https://github.com/trending"
+    const val BASE_URL = "https://api.github.com/"
+    const val BASE_TRENDING_URL = "https://github.com/trending/"
 
     private lateinit var context: Context
 

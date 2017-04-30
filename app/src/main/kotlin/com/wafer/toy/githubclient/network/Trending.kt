@@ -14,6 +14,6 @@ import retrofit2.http.QueryMap
  */
 interface Trending {
 
-    @GET
-    fun getTrending(@QueryMap(encoded = true) params: Map<String, String>): Flowable<Response<ResponseBody>>
+    @GET(".")
+    fun getTrending(@QueryMap(encoded = true) params: Map<String, String> = mapOf()): Flowable<Response<ResponseBody>>
 }
