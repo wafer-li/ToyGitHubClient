@@ -50,6 +50,7 @@ class TrendingContentFragment : Fragment() {
                     val repoLink = repoAElement.attr("href")
 
                     val repoTitle = repoAElement.text()
+                    val description = it.select(".py-1 > p").first().ownText()
                     val lang = it.select("[itemprop=programmingLanguage]").first().text()
                     val stars = it.select("a[href=$repoLink/stargazers]").first().text().filter { it.isDigit() }.toInt()
                     val forks = it.select("a[href=$repoLink/network]").first().text().filter { it.isDigit() }.toInt()
@@ -63,8 +64,10 @@ class TrendingContentFragment : Fragment() {
                                 User(userName = userName, avatarUrl = avatarUrl)
                             }
 
-                    val repo = Repo(fullName = repoTitle,
+                    val repo = Repo(
+                            fullName = repoTitle,
                             name = repoTitle.split("/")[1],
+                            description = description,
                             language = lang,
                             stargazersCount = stars,
                             forksCount = forks)
@@ -72,8 +75,7 @@ class TrendingContentFragment : Fragment() {
                     TrendingCard(repo, contributors)
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                }
+                .subscribe {}
     }
 
     private fun getSinceParam(index: Int): String =
