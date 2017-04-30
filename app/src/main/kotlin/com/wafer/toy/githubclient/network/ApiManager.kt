@@ -30,6 +30,7 @@ import kotlin.properties.Delegates
 object ApiManager {
 
     const val BASE_URL = "https://api.github.com"
+    const val BASE_TRENDING_URL = "https://github.com/trending"
 
     private lateinit var context: Context
 
@@ -97,6 +98,19 @@ object ApiManager {
 
         val client = clientBuilder.build()
         val retrofit = retrofitBuilder.client(client).build()
+
+        return retrofit.create(serviceClass)
+    }
+
+    fun createTrendingService(serviceClass: Class<Trending>): Trending {
+
+        val client = clientBuilder.build()
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_TRENDING_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(client)
+                .build()
 
         return retrofit.create(serviceClass)
     }
