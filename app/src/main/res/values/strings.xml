@@ -42,4 +42,6 @@
 
     <!-- Other -->
     <string name="built_by">Built By: </string>
+    <string name="unknown">Unknown</string>
+
 </resources>

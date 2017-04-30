@@ -27,7 +27,7 @@ class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
             itemView.repo_name.text = repo.fullName
             itemView.repo_descprition.text = repo.description.let { it ?: "" }
 
-            itemView.language.text = repo.language.let { it ?: "" }
+            itemView.language.text = repo.language
             itemView.star_count.text = repo.stargazersCount.toString()
             itemView.fork_count.text = repo.forksCount.toString()
         }

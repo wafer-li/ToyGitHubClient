@@ -75,7 +75,8 @@ class TrendingContentFragment : Fragment() {
                     val repoTitle = repoAElement.text()
 
                     val description = it.select(".py-1 > p").first()?.ownText()
-                    val lang = it.select("""[itemprop="programmingLanguage"]""").first()?.text()
+                    val lang = it.select("""[itemprop="programmingLanguage"]""")
+                            .first()?.text() ?: getString(R.string.unknown)
 
                     val stars = it.select("""a[href="$repoLink/stargazers"]""").first().text()
                             .filter { it.isDigit() }.toInt()
