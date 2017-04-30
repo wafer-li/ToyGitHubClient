@@ -16,4 +16,9 @@ object Constants {
     const val PAGE_TITLE = "PAGE_TITLE"
 
     const val PREF_CACHE_SIZE = "PREF_CACHE_SIZE"
+
+    const val SIZE_MB_IN_LONG = 1024 * 1024L
+
+    const val DEFAULT_CACHE_SIZE = 16 * SIZE_MB_IN_LONG
+
 }

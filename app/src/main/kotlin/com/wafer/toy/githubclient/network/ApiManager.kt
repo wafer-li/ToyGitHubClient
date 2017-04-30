@@ -1,6 +1,7 @@
 package com.wafer.toy.githubclient.network
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -36,17 +37,14 @@ object ApiManager {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
 
-    private val pref = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
+    private lateinit var pref: SharedPreferences
 
-    var cacheSize: Long
-            by Delegates.observable(pref.getInt(Constants.PREF_CACHE_SIZE, 16) * 1024 * 1024L) {
-                _, _, newValue ->
+    var cacheSize: Long by Delegates.observable(Constants.DEFAULT_CACHE_SIZE) { _, _, newValue ->
+        cache = Cache(context.cacheDir, newValue)
+        clientBuilder.cache(cache)
+    }
 
-                cache = Cache(context.cacheDir, newValue)
-                clientBuilder.cache(cache)
-            }
-
-    private var cache = Cache(context.cacheDir, cacheSize)
+    private lateinit var cache: Cache
 
     private val cacheControl =
             CacheControl.Builder()
@@ -64,10 +62,11 @@ object ApiManager {
             OkHttpClient.Builder()
                     .addInterceptor(CommonHeaderInterceptor())
                     .addInterceptor(CacheInterceptor(cacheControl))
-                    .cache(cache)
 
     fun init(context: Context) {
         this.context = context.applicationContext
+        pref = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
+        cacheSize = pref.getInt(Constants.PREF_CACHE_SIZE, 16) * Constants.SIZE_MB_IN_LONG
     }
 
     fun isNetworkAvailable(): Boolean {
@@ -102,3 +101,4 @@ object ApiManager {
         return retrofit.create(serviceClass)
     }
 }
+
