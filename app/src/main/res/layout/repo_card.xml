@@ -21,7 +21,7 @@
 
 
             <TextView
-                    android:text="kitze / sizzy"
+                    android:text="@string/preview_repo_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/repo_name"
@@ -35,7 +35,7 @@
                     app:layout_constraintLeft_toLeftOf="@+id/guideline4"/>
 
             <TextView
-                    android:text="A tool for developing responsive websites crazy-fast"
+                    android:text="@string/preview_repo_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/repo_descprition"
@@ -72,10 +72,11 @@
                     app:layout_constraintRight_toLeftOf="@+id/language"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline4"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintHorizontal_bias="0.0"/>
+                    app:layout_constraintHorizontal_bias="0.0"
+                    android:contentDescription="@string/content_des_language_icon"/>
 
             <TextView
-                    android:text="TextView"
+                    android:text="@string/preview_language"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/language"
@@ -99,10 +100,11 @@
                     app:layout_constraintRight_toLeftOf="@+id/star_count"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline2"
                     app:layout_constraintHorizontal_bias="0.34"
-                    app:layout_constraintHorizontal_chainStyle="packed"/>
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    android:contentDescription="@string/content_des_star_icon"/>
 
             <TextView
-                    android:text="TextView"
+                    android:text="@string/preview_star_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/star_count"
@@ -132,10 +134,11 @@
                     app:layout_constraintRight_toLeftOf="@+id/fork_count"
                     app:layout_constraintLeft_toLeftOf="@+id/guideline3"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintHorizontal_bias="0.32"/>
+                    app:layout_constraintHorizontal_bias="0.32"
+                    android:contentDescription="@string/content_des_source_fork_icon"/>
 
             <TextView
-                    android:text="TextView"
+                    android:text="@string/preview_fork_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/fork_count"
@@ -156,7 +159,7 @@
                     tools:layout_editor_absoluteX="353dp"/>
 
             <TextView
-                    android:text="Built By: "
+                    android:text="@string/built_by"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView17"
@@ -176,7 +179,7 @@
                     android:orientation="horizontal"/>
 
             <Button
-                    android:text="Star"
+                    android:text="@string/action_star"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/star_button"
