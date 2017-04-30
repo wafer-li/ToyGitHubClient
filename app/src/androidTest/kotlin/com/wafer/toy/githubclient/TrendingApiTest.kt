@@ -15,6 +15,7 @@ import io.reactivex.subscribers.TestSubscriber
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`
 import org.jsoup.Jsoup
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -58,6 +59,7 @@ class TrendingApiTest {
                     val repoLink = repoAElement.attr("href")
 
                     val repoTitle = repoAElement.text()
+                    val description = it.select(".py-1 > p").first().ownText()
                     val lang = it.select("[itemprop=programmingLanguage]").first().text()
                     val stars = it.select("a[href=$repoLink/stargazers]").first().text().filter { it.isDigit() }.toInt()
                     val forks = it.select("a[href=$repoLink/network]").first().text().filter { it.isDigit() }.toInt()
@@ -73,6 +75,7 @@ class TrendingApiTest {
 
                     val repo = Repo(fullName = repoTitle,
                             name = repoTitle.split("/")[1],
+                            description = description,
                             language = lang,
                             stargazersCount = stars,
                             forksCount = forks)
@@ -87,6 +90,25 @@ class TrendingApiTest {
         testSubscriber.assertComplete().assertNoErrors()
 
         assertThat(testSubscriber.valueCount() > 0, `is`(true))
+
+        assertEquals(true,
+                testSubscriber.values().all {
+                    it.repo.run {
+                        !fullName.isNullOrBlank() &&
+                                !name.isNullOrBlank() &&
+                                !language.isNullOrBlank() &&
+                                stargazersCount != null && stargazersCount != 0 &&
+                                forksCount != null && forksCount != 0
+                    } &&
+                            it.contributors.all {
+                                it.run {
+                                    !userName.isNullOrBlank() &&
+                                            userName!!.contains("@") &&
+                                            !avatarUrl.isNullOrBlank()
+                                }
+                            }
+                }
+        )
     }
 
     @Test
