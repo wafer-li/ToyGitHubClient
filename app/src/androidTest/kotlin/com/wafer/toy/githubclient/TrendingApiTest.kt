@@ -8,10 +8,10 @@ import com.wafer.toy.githubclient.model.network.TrendingCard
 import com.wafer.toy.githubclient.model.network.User
 import com.wafer.toy.githubclient.network.ApiManager
 import com.wafer.toy.githubclient.network.Trending
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.TestSubscriber
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`
 import org.jsoup.Jsoup
@@ -43,7 +43,7 @@ class TrendingApiTest {
     @Test
     fun testTrendingWithJsoup() {
 
-        val testSubscriber = TestSubscriber<TrendingCard>()
+        val testSubscriber = TestObserver<TrendingCard>()
 
         ApiManager.createTrendingService(Trending::class.java)
                 .getTrending(since = "daily")
@@ -51,7 +51,7 @@ class TrendingApiTest {
                 .filter { it.isSuccessful }
                 .flatMap {
                     // Map the HTML source to Repos
-                    Flowable.fromIterable(Jsoup.parse(it.body().string()).select("ol.repo-list"))
+                    Observable.fromIterable(Jsoup.parse(it.body().string()).select("ol.repo-list").first().children())
                 }
                 .map {
                     // `it` is the repo-list item, particularly <li>
@@ -59,10 +59,10 @@ class TrendingApiTest {
                     val repoLink = repoAElement.attr("href")
 
                     val repoTitle = repoAElement.text()
-                    val description = it.select(".py-1 > p").first().ownText()
-                    val lang = it.select("[itemprop=programmingLanguage]").first().text()
-                    val stars = it.select("a[href=$repoLink/stargazers]").first().text().filter { it.isDigit() }.toInt()
-                    val forks = it.select("a[href=$repoLink/network]").first().text().filter { it.isDigit() }.toInt()
+                    val description = it.select(".py-1 > p").first()?.ownText()
+                    val lang = it.select("""[itemprop="programmingLanguage"]""").first()?.text()
+                    val stars = it.select("a[href=\"$repoLink/stargazers\"]").first().text().filter { it.isDigit() }.toInt()
+                    val forks = it.select("a[href=\"$repoLink/network\"]").first().text().filter { it.isDigit() }.toInt()
 
                     val contributors = it.select("a[href=$repoLink/graphs/contributors]").first()
                             .children()
@@ -89,14 +89,13 @@ class TrendingApiTest {
 
         testSubscriber.assertComplete().assertNoErrors()
 
-        assertThat(testSubscriber.valueCount() > 0, `is`(true))
+        assertThat(testSubscriber.valueCount(), `is`(25))
 
         assertEquals(true,
                 testSubscriber.values().all {
                     it.repo.run {
                         !fullName.isNullOrBlank() &&
                                 !name.isNullOrBlank() &&
-                                !language.isNullOrBlank() &&
                                 stargazersCount != null && stargazersCount != 0 &&
                                 forksCount != null && forksCount != 0
                     } &&
@@ -114,18 +113,18 @@ class TrendingApiTest {
     @Test
     fun testTrending() {
 
-        val testSubscriber = TestSubscriber<Response<ResponseBody>>()
+        val testObserver = TestObserver<Response<ResponseBody>>()
 
         trending.getTrending(since = "monthly")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(testSubscriber)
+                .subscribe(testObserver)
 
-        testSubscriber.awaitTerminalEvent()
+        testObserver.awaitTerminalEvent()
 
-        testSubscriber.assertComplete().assertNoErrors()
+        testObserver.assertComplete().assertNoErrors()
         assertThat(
-                testSubscriber.values().all {
+                testObserver.values().all {
                     it.isSuccessful && it.body().string().contains("Trending  repositories on GitHub this month")
                 },
                 `is`(true)

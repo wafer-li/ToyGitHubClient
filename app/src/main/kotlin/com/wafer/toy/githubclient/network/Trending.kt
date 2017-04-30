@@ -1,6 +1,6 @@
 package com.wafer.toy.githubclient.network
 
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
@@ -16,5 +16,5 @@ import retrofit2.http.Query
 interface Trending {
 
     @GET("{language}")
-    fun getTrending(@Path("language") language: String = ".", @Query("since") since: String): Flowable<Response<ResponseBody>>
+    fun getTrending(@Path("language") language: String = ".", @Query("since") since: String): Observable<Response<ResponseBody>>
 }

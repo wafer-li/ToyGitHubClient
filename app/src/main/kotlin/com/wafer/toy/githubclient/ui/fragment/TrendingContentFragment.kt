@@ -2,6 +2,8 @@ package com.wafer.toy.githubclient.ui.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +14,13 @@ import com.wafer.toy.githubclient.model.network.TrendingCard
 import com.wafer.toy.githubclient.model.network.User
 import com.wafer.toy.githubclient.network.ApiManager
 import com.wafer.toy.githubclient.network.Trending
-import io.reactivex.Flowable
+import com.wafer.toy.githubclient.ui.adapter.TrendingContentAdapter
+import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.content_main.*
 import org.jsoup.Jsoup
 
 
@@ -29,20 +35,37 @@ class TrendingContentFragment : Fragment() {
     private lateinit var pageTitle: String
     private lateinit var trendingTitles: Array<out String>
 
+    private val trendingCards = mutableListOf<TrendingCard>()
+    private val trendingContentAdapter = TrendingContentAdapter(trendingCards)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
         trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater?.inflate(R.layout.content_main, container, false)
+        return view
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recycler.layoutManager = LinearLayoutManager(activity)
+        recycler.adapter = trendingContentAdapter
 
         val since = getSinceParam(trendingTitles.indexOf(pageTitle))
 
         ApiManager.createTrendingService(Trending::class.java)
                 .getTrending(since = since)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .filter { it.isSuccessful }
                 .flatMap {
                     // Map the HTML source to Repos
-                    Flowable.fromIterable(Jsoup.parse(it.body().string()).select("ol.repo-list"))
+                    Observable.fromIterable(
+                            Jsoup.parse(it.body().string()).select("ol.repo-list").first().children())
                 }
                 .map {
                     // `it` is the repo-list item, particularly <li>
@@ -50,10 +73,14 @@ class TrendingContentFragment : Fragment() {
                     val repoLink = repoAElement.attr("href")
 
                     val repoTitle = repoAElement.text()
-                    val description = it.select(".py-1 > p").first().ownText()
-                    val lang = it.select("[itemprop=programmingLanguage]").first().text()
-                    val stars = it.select("a[href=$repoLink/stargazers]").first().text().filter { it.isDigit() }.toInt()
-                    val forks = it.select("a[href=$repoLink/network]").first().text().filter { it.isDigit() }.toInt()
+
+                    val description = it.select(".py-1 > p").first()?.ownText()
+                    val lang = it.select("""[itemprop="programmingLanguage"]""").first()?.text()
+
+                    val stars = it.select("""a[href="$repoLink/stargazers"]""").first().text()
+                            .filter { it.isDigit() }.toInt()
+                    val forks = it.select("""a[href="$repoLink/network"]""").first().text()
+                            .filter { it.isDigit() }.toInt()
 
                     val contributors = it.select("a[href=$repoLink/graphs/contributors]").first()
                             .children()
@@ -74,8 +101,29 @@ class TrendingContentFragment : Fragment() {
 
                     TrendingCard(repo, contributors)
                 }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {}
+                .subscribe(object : Observer<TrendingCard> {
+                    override fun onSubscribe(d: Disposable?) {
+                        Log.d("Subscribe", "S!")
+                        trendingCards.clear()
+                    }
+
+                    override fun onComplete() {
+                        Log.d("Complete", "C!")
+                        trendingContentAdapter.notifyDataSetChanged()
+                    }
+
+                    override fun onNext(t: TrendingCard?) {
+                        Log.d("Next", "N!")
+                        if (t != null) {
+                            trendingCards.add(t)
+                        }
+                    }
+
+                    override fun onError(t: Throwable?) {
+                        Log.d("ERROR", "E!")
+                        t?.printStackTrace()
+                    }
+                })
     }
 
     private fun getSinceParam(index: Int): String =
@@ -84,11 +132,4 @@ class TrendingContentFragment : Fragment() {
                 2 -> "monthly"
                 else -> "daily"
             }
-
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.content_main, container, false)
-
-        return view
-    }
 }

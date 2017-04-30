@@ -18,16 +18,16 @@ import kotlinx.android.synthetic.main.repo_card.view.*
  */
 
 
-class TrendingContentAdapter(val trendingCards: List<TrendingCard>)
+class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
     : RecyclerView.Adapter<TrendingContentAdapter.ViewHolder>() {
 
     class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
 
         fun bindRepoInfo(repo: Repo) {
             itemView.repo_name.text = repo.fullName
-            itemView.repo_descprition.text = repo.description
+            itemView.repo_descprition.text = repo.description.let { it ?: "" }
 
-            itemView.language.text = repo.language
+            itemView.language.text = repo.language.let { it ?: "" }
             itemView.star_count.text = repo.stargazersCount.toString()
             itemView.fork_count.text = repo.forksCount.toString()
         }
