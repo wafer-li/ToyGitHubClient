@@ -7,8 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
-import java.text.SimpleDateFormat
-import java.util.*
+import com.wafer.toy.githubclient.model.network.Repo
+import com.wafer.toy.githubclient.model.network.TrendingCard
+import com.wafer.toy.githubclient.model.network.User
+import com.wafer.toy.githubclient.network.ApiManager
+import com.wafer.toy.githubclient.network.Trending
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import org.jsoup.Jsoup
 
 
 /**
@@ -20,7 +27,6 @@ import java.util.*
 class TrendingContentFragment : Fragment() {
 
     private lateinit var pageTitle: String
-
     private lateinit var trendingTitles: Array<out String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,34 +34,54 @@ class TrendingContentFragment : Fragment() {
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
         trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
 
-        val date = getPushedDate(trendingTitles.indexOf(pageTitle))
+        val since = getSinceParam(trendingTitles.indexOf(pageTitle))
+
+        ApiManager.createTrendingService(Trending::class.java)
+                .getTrending(since = since)
+                .subscribeOn(Schedulers.io())
+                .filter { it.isSuccessful }
+                .flatMap {
+                    // Map the HTML source to Repos
+                    Flowable.fromIterable(Jsoup.parse(it.body().string()).select("ol.repo-list"))
+                }
+                .map {
+                    // `it` is the repo-list item, particularly <li>
+                    val repoAElement = it.select("h3 > a").first()
+                    val repoLink = repoAElement.attr("href")
+
+                    val repoTitle = repoAElement.text()
+                    val lang = it.select("[itemprop=programmingLanguage]").first().text()
+                    val stars = it.select("a[href=$repoLink/stargazers]").first().text().filter { it.isDigit() }.toInt()
+                    val forks = it.select("a[href=$repoLink/network]").first().text().filter { it.isDigit() }.toInt()
+
+                    val contributors = it.select("a[href=$repoLink/graphs/contributors]").first()
+                            .children()
+                            .map {
+                                // it is the contributor's avatar
+                                val userName = it.attr("alt").apply { drop(1) }
+                                val avatarUrl = it.attr("src")
+                                User(userName = userName, avatarUrl = avatarUrl)
+                            }
+
+                    val repo = Repo(fullName = repoTitle,
+                            name = repoTitle.split("/")[1],
+                            language = lang,
+                            stargazersCount = stars,
+                            forksCount = forks)
+
+                    TrendingCard(repo, contributors)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                }
     }
 
-
-    private fun getPushedDate(index: Int): String {
-        // Monday as the first day of week
-        val calendar = Calendar.getInstance().apply { firstDayOfWeek = Calendar.MONDAY }
-
-        val dateLiteral: String = when (index) {
-            0 -> {
-                // Today
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+    private fun getSinceParam(index: Int): String =
+            when (index) {
+                1 -> "weekly"
+                2 -> "monthly"
+                else -> "daily"
             }
-            1 -> {
-                // This week
-                val date = calendar.apply { set(Calendar.DAY_OF_WEEK, firstDayOfWeek) }.time
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
-            }
-            2 -> {
-                // This month
-                val date = calendar.apply { set(Calendar.DAY_OF_MONTH, 1) }.time
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
-            }
-            else -> ""
-        }
-
-        return dateLiteral
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

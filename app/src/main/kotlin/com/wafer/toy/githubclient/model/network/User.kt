@@ -16,7 +16,7 @@ data class User(
         val starredUrl: String? = null,
 
         @field:SerializedName("login")
-        val login: String? = null,
+        val userName: String? = null,
 
         @field:SerializedName("followers_url")
         val followersUrl: String? = null,

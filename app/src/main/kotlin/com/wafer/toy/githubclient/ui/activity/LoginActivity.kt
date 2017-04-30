@@ -14,6 +14,6 @@ class LoginActivity : AppCompatActivity() {
 
         login_toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        login.setOnClickListener { Snackbar.make(it, "login", Snackbar.LENGTH_LONG).show() }
+        login.setOnClickListener { Snackbar.make(it, "userName", Snackbar.LENGTH_LONG).show() }
     }
 }
