@@ -7,57 +7,53 @@ import android.view.View
 import android.view.ViewGroup
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
- * The NestedContentFragment class
+ * The TrendingContentFragment class
  * Please put more info here.
  * @author wafer
  * @since 17/4/29 20:02
  */
-class NestedContentFragment : Fragment() {
+class TrendingContentFragment : Fragment() {
 
     private lateinit var pageTitle: String
 
-    private val mainTitles = resources.getStringArray(R.array.main_tab_titles)
     private val trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
+        val date = getPushedDate(trendingTitles.indexOf(pageTitle))
 
-        proceedMainTitle(mainTitles.indexOf(pageTitle))
-        proceedMainTitle(trendingTitles.indexOf(pageTitle))
     }
 
-    private fun proceedMainTitle(index: Int) {
-        when (index) {
-            0 -> {
-                // Dashboard
-            }
-            1 -> {
-                // Repos
-            }
 
-            else -> return
-        }
-    }
+    private fun getPushedDate(index: Int): String {
+        // Monday as the first day of week
+        val calendar = Calendar.getInstance().apply { firstDayOfWeek = Calendar.MONDAY }
 
-    private fun proceedTrendingTitle(index: Int) {
-        when (index) {
+        val dateLiteral: String = when (index) {
             0 -> {
                 // Today
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
             }
-
             1 -> {
                 // This week
+                val date = calendar.apply { set(Calendar.DAY_OF_WEEK, firstDayOfWeek) }.time
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
             }
-
             2 -> {
                 // This month
+                val date = calendar.apply { set(Calendar.DAY_OF_MONTH, 1) }.time
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
             }
-
-            else -> return
+            else -> ""
         }
+
+        return dateLiteral
     }
 
 

@@ -8,7 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.ui.activity.MainActivity
-import com.wafer.toy.githubclient.ui.fragment.NestedContentFragment
+import com.wafer.toy.githubclient.ui.fragment.MainContentFragment
+import com.wafer.toy.githubclient.ui.fragment.TrendingContentFragment
 import kotlin.properties.Delegates
 
 /**
@@ -24,17 +25,22 @@ class MainPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerAda
         when (newValue) {
             MainActivity.PageIndicator.MAIN -> {
                 titles = context.resources.getStringArray(R.array.main_tab_titles)
+                fragments = titles.map {
+                    val args = Bundle().apply { putString(Constants.PAGE_TITLE, it) }
+                    MainContentFragment().apply { arguments = args }
+                }
             }
 
             MainActivity.PageIndicator.TRENDING -> {
                 titles = context.resources.getStringArray(R.array.trending_tab_titles)
+                fragments = titles.map {
+                    val args = Bundle().apply { putString(Constants.PAGE_TITLE, it) }
+                    TrendingContentFragment().apply { arguments = args }
+                }
             }
         }
 
-        fragments = titles.map {
-            val args = Bundle().apply { putString(Constants.PAGE_TITLE, it) }
-            NestedContentFragment().apply { arguments = args }
-        }
+
     }
 
     private lateinit var titles: Array<out String>
