@@ -4,7 +4,8 @@ import io.reactivex.Flowable
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.QueryMap
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * The Api
@@ -14,6 +15,6 @@ import retrofit2.http.QueryMap
  */
 interface Trending {
 
-    @GET(".")
-    fun getTrending(@QueryMap(encoded = true) params: Map<String, String> = mapOf()): Flowable<Response<ResponseBody>>
+    @GET("{language}")
+    fun getTrending(@Path("language") language: String = ".", @Query("since") since: String): Flowable<Response<ResponseBody>>
 }

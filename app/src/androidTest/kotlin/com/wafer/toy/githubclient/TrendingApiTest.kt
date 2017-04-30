@@ -39,7 +39,7 @@ class TrendingApiTest {
 
         val testSubscriber = TestSubscriber<Response<ResponseBody>>()
 
-        trending.getTrending()
+        trending.getTrending(since = "monthly")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(testSubscriber)
@@ -47,6 +47,6 @@ class TrendingApiTest {
         testSubscriber.awaitTerminalEvent()
 
         testSubscriber.assertComplete().assertNoErrors()
-        assertThat(testSubscriber.values().all { it.isSuccessful && it.body().string().contains("html") }, `is`(true))
+        assertThat(testSubscriber.values().all { it.isSuccessful && it.body().string().contains("Trending  repositories on GitHub this month") }, `is`(true))
     }
 }
