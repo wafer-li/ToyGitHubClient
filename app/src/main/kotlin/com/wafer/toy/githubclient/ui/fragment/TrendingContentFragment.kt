@@ -24,6 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
 import org.jsoup.Jsoup
 import retrofit2.HttpException
+import kotlin.properties.Delegates
 
 
 /**
@@ -43,6 +44,13 @@ class TrendingContentFragment : Fragment() {
     private val trendingContentAdapter = TrendingContentAdapter(trendingCards)
 
     private var isLoaded = false
+
+    var isFragmentVisible by Delegates.observable(true) {
+        _, _, visible ->
+
+        if (visible)
+            loadData(since, !isLoaded, observer)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +74,9 @@ class TrendingContentFragment : Fragment() {
 
                 trendingCards.clear()
                 trendingContentAdapter.notifyDataSetChanged()
-                swipe_refresh.isRefreshing = true
+
+                if (!swipe_refresh.isRefreshing)
+                    swipe_refresh.isRefreshing = true
             }
 
             override fun onComplete() {
@@ -74,7 +84,9 @@ class TrendingContentFragment : Fragment() {
 
                 trendingContentAdapter.notifyDataSetChanged()
                 isLoaded = true
-                swipe_refresh.isRefreshing = false
+
+                if (swipe_refresh.isRefreshing)
+                    swipe_refresh.isRefreshing = false
             }
 
             override fun onNext(t: TrendingCard?) {
@@ -89,7 +101,8 @@ class TrendingContentFragment : Fragment() {
                 Log.d("onERROR", "E!")
                 t?.printStackTrace()
 
-                swipe_refresh.isRefreshing = false
+                if (swipe_refresh.isRefreshing)
+                    swipe_refresh.isRefreshing = false
 
                 when (t) {
                     is HttpException -> {
@@ -108,7 +121,8 @@ class TrendingContentFragment : Fragment() {
 
         swipe_refresh.setOnRefreshListener { loadData(since, true, observer) }
 
-        loadData(since, !isLoaded, observer)
+        if (isFragmentVisible)
+            loadData(since, !isLoaded, observer)
     }
 
     private fun loadData(since: String, openLoad: Boolean, observer: Observer<TrendingCard>) {

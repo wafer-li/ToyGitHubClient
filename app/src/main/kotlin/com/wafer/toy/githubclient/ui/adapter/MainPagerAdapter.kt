@@ -33,9 +33,16 @@ class MainPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerAda
 
             MainActivity.PageIndicator.TRENDING -> {
                 titles = context.resources.getStringArray(R.array.trending_tab_titles)
-                fragments = titles.map {
-                    val args = Bundle().apply { putString(Constants.PAGE_TITLE, it) }
-                    TrendingContentFragment().apply { arguments = args }
+                fragments = titles.mapIndexed { index, title ->
+
+                    val args = Bundle().apply { putString(Constants.PAGE_TITLE, title) }
+
+                    TrendingContentFragment().apply {
+                        arguments = args
+
+                        if (index != 0)
+                            isFragmentVisible = false
+                    }
                 }
             }
         }

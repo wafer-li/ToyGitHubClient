@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import android.view.View
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.ui.adapter.MainPagerAdapter
+import com.wafer.toy.githubclient.ui.fragment.TrendingContentFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
@@ -55,6 +57,23 @@ class MainActivity : AppCompatActivity() {
         updatePageState(indicator)
 
         view_pager.adapter = pagerAdapter
+
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                val fragment = pagerAdapter.getItem(position)
+
+                if (fragment is TrendingContentFragment)
+                    fragment.isFragmentVisible = true
+            }
+
+        })
+
         tabs.setupWithViewPager(view_pager)
     }
 
