@@ -20,7 +20,6 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import retrofit2.Response
 
 /**
  * The TrendingApiTest
@@ -43,7 +42,7 @@ class TrendingApiTest {
     @Test
     fun testTrending() {
 
-        val testObserver = TestObserver<Response<ResponseBody>>()
+        val testObserver = TestObserver<ResponseBody>()
 
         trendingApi.getTrending(since = "monthly")
                 .subscribeOn(Schedulers.io())
@@ -55,8 +54,7 @@ class TrendingApiTest {
         testObserver.assertComplete().assertNoErrors()
         assertThat(
                 testObserver.values().all {
-                    it.isSuccessful &&
-                            it.body().string().contains("Trending  repositories on GitHub this month")
+                    it.string().contains("Trending  repositories on GitHub this month")
                 },
                 `is`(true)
         )
@@ -67,10 +65,9 @@ class TrendingApiTest {
         trendingApi
                 .getTrending(since = since)
                 .subscribeOn(Schedulers.io())
-                .filter { it.isSuccessful }
                 .flatMap {
                     // Map the HTML source to Repos
-                    Observable.fromIterable(Jsoup.parse(it.body().string()).select("ol.repo-list").first().children())
+                    Observable.fromIterable(Jsoup.parse(it.string()).select("ol.repo-list").first().children())
                 }
                 .map {
                     // `it` is the repo-list item, particularly <li>
