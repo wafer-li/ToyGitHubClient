@@ -1,6 +1,7 @@
 package com.wafer.toy.githubclient.ui.fragment
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -22,6 +23,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
 import org.jsoup.Jsoup
+import retrofit2.HttpException
 
 
 /**
@@ -59,17 +61,65 @@ class TrendingContentFragment : Fragment() {
 
         val since = getSinceParam(trendingTitles.indexOf(pageTitle))
 
-        if (!isLoaded) {
+        loadData(since, !isLoaded,
+                object : Observer<TrendingCard> {
+                    override fun onSubscribe(d: Disposable?) {
+                        Log.d("onSubscribe", "S!")
+
+                        if (!isLoaded)
+                            trendingCards.clear()
+                    }
+
+                    override fun onComplete() {
+                        Log.d("onComplete", "C!")
+                        trendingContentAdapter.notifyDataSetChanged()
+                        isLoaded = true
+                    }
+
+                    override fun onNext(t: TrendingCard?) {
+                        Log.d("onNext", "N!")
+                        if (t != null && !isLoaded) {
+                            trendingCards.add(t)
+                        }
+                    }
+
+                    override fun onError(t: Throwable?) {
+                        Log.d("onERROR", "E!")
+                        t?.printStackTrace()
+
+                        when (t) {
+                            is HttpException -> {
+                                Snackbar.make(recycler.rootView,
+                                        "Network Error: ${t.code()} ${t.message()}",
+                                        Snackbar.LENGTH_LONG)
+                                        .show()
+                            }
+
+                            else -> {
+                                Snackbar.make(recycler.rootView,
+                                        "Parse Error",
+                                        Snackbar.LENGTH_LONG)
+                                        .show()
+                            }
+                        }
+
+                    }
+                }
+        )
+    }
+
+    private fun loadData(since: String, openLoad: Boolean, observer: Observer<TrendingCard>) {
+
+        if (openLoad) {
 
             ApiManager.createTrendingService(TrendingApi::class.java)
                     .getTrending(since = since)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .filter { it.isSuccessful }
                     .flatMap {
                         // Map the HTML source to Repos
                         Observable.fromIterable(
-                                Jsoup.parse(it.body().string()).select("ol.repo-list").first().children())
+                                Jsoup.parse(it.string()).select("ol.repo-list").first().children())
                     }
                     .map {
                         // `it` is the repo-list item, particularly <li>
@@ -109,34 +159,11 @@ class TrendingContentFragment : Fragment() {
 
                         TrendingCard(repo, contributors, starsTimeInterval)
                     }
-                    .subscribe(object : Observer<TrendingCard> {
-                        override fun onSubscribe(d: Disposable?) {
-                            Log.d("Subscribe", "S!")
+                    .subscribe(observer)
 
-                            if (!isLoaded)
-                                trendingCards.clear()
-                        }
-
-                        override fun onComplete() {
-                            Log.d("Complete", "C!")
-                            trendingContentAdapter.notifyDataSetChanged()
-                            isLoaded = true
-                        }
-
-                        override fun onNext(t: TrendingCard?) {
-                            Log.d("Next", "N!")
-                            if (t != null && !isLoaded) {
-                                trendingCards.add(t)
-                            }
-                        }
-
-                        override fun onError(t: Throwable?) {
-                            Log.d("ERROR", "E!")
-                            t?.printStackTrace()
-                        }
-                    })
         }
     }
+
 
     private fun getSinceParam(index: Int): String =
             when (index) {
