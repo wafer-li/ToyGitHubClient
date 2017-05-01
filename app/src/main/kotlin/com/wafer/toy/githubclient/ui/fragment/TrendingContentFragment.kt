@@ -13,7 +13,7 @@ import com.wafer.toy.githubclient.model.network.Repo
 import com.wafer.toy.githubclient.model.network.TrendingCard
 import com.wafer.toy.githubclient.model.network.User
 import com.wafer.toy.githubclient.network.ApiManager
-import com.wafer.toy.githubclient.network.Trending
+import com.wafer.toy.githubclient.network.TrendingApi
 import com.wafer.toy.githubclient.ui.adapter.TrendingContentAdapter
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -61,7 +61,7 @@ class TrendingContentFragment : Fragment() {
 
         if (!isLoaded) {
 
-            ApiManager.createTrendingService(Trending::class.java)
+            ApiManager.createTrendingService(TrendingApi::class.java)
                     .getTrending(since = since)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

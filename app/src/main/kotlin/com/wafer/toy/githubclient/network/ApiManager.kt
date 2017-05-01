@@ -102,7 +102,7 @@ object ApiManager {
         return retrofit.create(serviceClass)
     }
 
-    fun createTrendingService(serviceClass: Class<Trending>): Trending {
+    fun createTrendingService(serviceClass: Class<TrendingApi>): TrendingApi {
 
         val client = clientBuilder.build()
 

@@ -13,7 +13,7 @@ import retrofit2.http.Query
  * @author wafer
  * @since 17/4/30 01:35
  */
-interface Trending {
+interface TrendingApi {
 
     @GET("{language}")
     fun getTrending(@Path("language") language: String = ".", @Query("since") since: String): Observable<Response<ResponseBody>>

@@ -7,7 +7,7 @@ import com.wafer.toy.githubclient.model.network.Repo
 import com.wafer.toy.githubclient.model.network.TrendingCard
 import com.wafer.toy.githubclient.model.network.User
 import com.wafer.toy.githubclient.network.ApiManager
-import com.wafer.toy.githubclient.network.Trending
+import com.wafer.toy.githubclient.network.TrendingApi
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.TestObserver
@@ -31,18 +31,40 @@ import retrofit2.Response
 @RunWith(AndroidJUnit4::class)
 class TrendingApiTest {
 
-    lateinit var trending: Trending
+    lateinit var trendingApi: TrendingApi
     lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getTargetContext()
-        trending = ApiManager.apply { init(context) }.createTrendingService(Trending::class.java)
+        trendingApi = ApiManager.apply { init(context) }.createTrendingService(TrendingApi::class.java)
     }
 
+    @Test
+    fun testTrending() {
+
+        val testObserver = TestObserver<Response<ResponseBody>>()
+
+        trendingApi.getTrending(since = "monthly")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(testObserver)
+
+        testObserver.awaitTerminalEvent()
+
+        testObserver.assertComplete().assertNoErrors()
+        assertThat(
+                testObserver.values().all {
+                    it.isSuccessful &&
+                            it.body().string().contains("Trending  repositories on GitHub this month")
+                },
+                `is`(true)
+        )
+
+    }
 
     private fun buildTrendingWithJsoupBySince(since: String, testObserver: TestObserver<TrendingCard>) {
-        trending
+        trendingApi
                 .getTrending(since = since)
                 .subscribeOn(Schedulers.io())
                 .filter { it.isSuccessful }
@@ -111,6 +133,7 @@ class TrendingApiTest {
         )
     }
 
+
     @Test
     fun testTrendingWithJsoupDaily() {
 
@@ -147,25 +170,5 @@ class TrendingApiTest {
         assertSuccess(testObserver)
     }
 
-    @Test
-    fun testTrending() {
 
-        val testObserver = TestObserver<Response<ResponseBody>>()
-
-        trending.getTrending(since = "monthly")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(testObserver)
-
-        testObserver.awaitTerminalEvent()
-
-        testObserver.assertComplete().assertNoErrors()
-        assertThat(
-                testObserver.values().all {
-                    it.isSuccessful && it.body().string().contains("Trending  repositories on GitHub this month")
-                },
-                `is`(true)
-        )
-
-    }
 }
