@@ -8,8 +8,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.network.interceptors.AuthenticationInterceptor
-import com.wafer.toy.githubclient.network.interceptors.CacheInterceptor
-import com.wafer.toy.githubclient.network.interceptors.CacheNetworkInterceptor
+import com.wafer.toy.githubclient.network.interceptors.CacheRewriteRequestOfflineInterceptor
+import com.wafer.toy.githubclient.network.interceptors.CacheRewriteResponseInterceptor
 import com.wafer.toy.githubclient.network.interceptors.CommonHeaderInterceptor
 import okhttp3.Cache
 import okhttp3.CacheControl
@@ -62,9 +62,9 @@ object ApiManager {
 
     private val clientBuilder: OkHttpClient.Builder =
             OkHttpClient.Builder()
-                    .addNetworkInterceptor(CacheNetworkInterceptor())
-                    .addInterceptor(CacheInterceptor(cacheControl))
-                    .addInterceptor(CommonHeaderInterceptor())
+                    .addNetworkInterceptor(CacheRewriteResponseInterceptor)
+                    .addInterceptor(CacheRewriteRequestOfflineInterceptor)
+                    .addInterceptor(CommonHeaderInterceptor)
 
     fun init(context: Context) {
         this.context = context.applicationContext

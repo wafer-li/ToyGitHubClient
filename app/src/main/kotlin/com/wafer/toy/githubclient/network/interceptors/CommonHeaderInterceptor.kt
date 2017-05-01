@@ -10,7 +10,7 @@ import okhttp3.Response
  * @author wafer
  * @since 17/4/30 04:19
  */
-class CommonHeaderInterceptor : Interceptor {
+object CommonHeaderInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain?): Response {
         val originRequest = chain?.request()

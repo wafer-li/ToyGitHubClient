@@ -6,18 +6,21 @@ import okhttp3.Interceptor
 
 
 /**
- * The CacheInterceptor
+ * The CacheRewriteRequestOfflineInterceptor
  * Please put more info here.
  * @author wafer
  * @since 17/4/30 04:35
  */
-class CacheInterceptor(val cacheControl: CacheControl) : Interceptor {
+object CacheRewriteRequestOfflineInterceptor : Interceptor {
+
+    val cacheControl: CacheControl = CacheControl.FORCE_CACHE
+
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         var request = chain.request()
         if (!ApiManager.isNetworkAvailable()) {
             request = request.newBuilder()
                     .removeHeader("Pragma")
-                    .header("Cache-Control", "public, only-if-cached")
+                    .cacheControl(cacheControl)
                     .build()
         }
         return chain.proceed(request)
