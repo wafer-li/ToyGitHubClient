@@ -130,6 +130,7 @@ class TrendingContentFragment : Fragment() {
             ApiManager.createTrendingService(TrendingApi::class.java)
                     .getTrending(since = since)
                     .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
                     .flatMap {
                         // Map the HTML source to Repos
                         Observable.fromIterable(
