@@ -36,6 +36,8 @@ class TrendingContentFragment : Fragment() {
 
     private lateinit var pageTitle: String
     private lateinit var trendingTitles: Array<out String>
+    private lateinit var since: String
+    private lateinit var observer: Observer<TrendingCard>
 
     private val trendingCards = mutableListOf<TrendingCard>()
     private val trendingContentAdapter = TrendingContentAdapter(trendingCards)
@@ -46,6 +48,9 @@ class TrendingContentFragment : Fragment() {
         super.onCreate(savedInstanceState)
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
         trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
+        since = getSinceParam(trendingTitles.indexOf(pageTitle))
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,62 +61,57 @@ class TrendingContentFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observer = object : Observer<TrendingCard> {
+            override fun onSubscribe(d: Disposable?) {
+                Log.d("onSubscribe", "S!")
+
+                trendingCards.clear()
+                trendingContentAdapter.notifyDataSetChanged()
+                swipe_refresh.isRefreshing = true
+            }
+
+            override fun onComplete() {
+                Log.d("onComplete", "C!")
+
+                trendingContentAdapter.notifyDataSetChanged()
+                isLoaded = true
+                swipe_refresh.isRefreshing = false
+            }
+
+            override fun onNext(t: TrendingCard?) {
+                Log.d("onNext", "N!")
+
+                if (t != null) {
+                    trendingCards.add(t)
+                }
+            }
+
+            override fun onError(t: Throwable?) {
+                Log.d("onERROR", "E!")
+                t?.printStackTrace()
+
+                when (t) {
+                    is HttpException -> {
+                        Snackbar.make(recycler.rootView, "Network Error: ${t.code()} ${t.message()}",
+                                Snackbar.LENGTH_LONG)
+                                .show()
+                    }
+                    else ->
+                        Snackbar.make(recycler.rootView, "Parse Error", Snackbar.LENGTH_LONG).show()
+                }
+            }
+        }
+
         recycler.layoutManager = LinearLayoutManager(activity)
         recycler.adapter = trendingContentAdapter
 
-        val since = getSinceParam(trendingTitles.indexOf(pageTitle))
+        swipe_refresh.setOnRefreshListener { loadData(since, true, observer) }
 
-        loadData(since, !isLoaded,
-                object : Observer<TrendingCard> {
-                    override fun onSubscribe(d: Disposable?) {
-                        Log.d("onSubscribe", "S!")
-
-                        if (!isLoaded)
-                            trendingCards.clear()
-                    }
-
-                    override fun onComplete() {
-                        Log.d("onComplete", "C!")
-                        trendingContentAdapter.notifyDataSetChanged()
-                        isLoaded = true
-                    }
-
-                    override fun onNext(t: TrendingCard?) {
-                        Log.d("onNext", "N!")
-                        if (t != null && !isLoaded) {
-                            trendingCards.add(t)
-                        }
-                    }
-
-                    override fun onError(t: Throwable?) {
-                        Log.d("onERROR", "E!")
-                        t?.printStackTrace()
-
-                        when (t) {
-                            is HttpException -> {
-                                Snackbar.make(recycler.rootView,
-                                        "Network Error: ${t.code()} ${t.message()}",
-                                        Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-
-                            else -> {
-                                Snackbar.make(recycler.rootView,
-                                        "Parse Error",
-                                        Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                        }
-
-                    }
-                }
-        )
+        loadData(since, !isLoaded, observer)
     }
 
     private fun loadData(since: String, openLoad: Boolean, observer: Observer<TrendingCard>) {
-
         if (openLoad) {
-
             ApiManager.createTrendingService(TrendingApi::class.java)
                     .getTrending(since = since)
                     .subscribeOn(Schedulers.io())
@@ -160,7 +160,6 @@ class TrendingContentFragment : Fragment() {
                         TrendingCard(repo, contributors, starsTimeInterval)
                     }
                     .subscribe(observer)
-
         }
     }
 
