@@ -3,7 +3,7 @@ package com.wafer.toy.githubclient.network.interceptors
 import com.wafer.toy.githubclient.network.ApiManager
 import okhttp3.CacheControl
 import okhttp3.Interceptor
-import okhttp3.Response
+
 
 /**
  * The CacheInterceptor
@@ -12,15 +12,14 @@ import okhttp3.Response
  * @since 17/4/30 04:35
  */
 class CacheInterceptor(val cacheControl: CacheControl) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain?): Response {
-        var request = chain!!.request()
-
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+        var request = chain.request()
         if (!ApiManager.isNetworkAvailable()) {
             request = request.newBuilder()
-                    .cacheControl(cacheControl)
+                    .removeHeader("Pragma")
+                    .header("Cache-Control", "public, only-if-cached")
                     .build()
         }
-
         return chain.proceed(request)
     }
 }
