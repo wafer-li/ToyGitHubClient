@@ -40,13 +40,10 @@ class TrendingApiTest {
         trending = ApiManager.apply { init(context) }.createTrendingService(Trending::class.java)
     }
 
-    @Test
-    fun testTrendingWithJsoup() {
 
-        val testSubscriber = TestObserver<TrendingCard>()
-
+    private fun buildTrendingWithJsoupBySince(since: String, testObserver: TestObserver<TrendingCard>) {
         ApiManager.createTrendingService(Trending::class.java)
-                .getTrending(since = "daily")
+                .getTrending(since = since)
                 .subscribeOn(Schedulers.io())
                 .filter { it.isSuccessful }
                 .flatMap {
@@ -86,16 +83,17 @@ class TrendingApiTest {
                     TrendingCard(repo, contributors, starsTimeInterval)
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(testSubscriber)
+                .subscribe(testObserver)
+    }
 
-        testSubscriber.awaitTerminalEvent()
+    private fun assertSuccess(testObserver: TestObserver<TrendingCard>) {
 
-        testSubscriber.assertComplete().assertNoErrors()
+        testObserver.assertComplete().assertNoErrors()
 
-        assertThat(testSubscriber.valueCount(), `is`(25))
+        assertThat(testObserver.valueCount(), `is`(25))
 
         assertEquals(true,
-                testSubscriber.values().all {
+                testObserver.values().all {
                     it.repo.run {
                         !fullName.isNullOrBlank() &&
                                 !name.isNullOrBlank() &&
@@ -111,6 +109,42 @@ class TrendingApiTest {
                             } || it.contributors.isEmpty())
                 }
         )
+    }
+
+    @Test
+    fun testTrendingWithJsoupDaily() {
+
+        val testObserver = TestObserver<TrendingCard>()
+
+        buildTrendingWithJsoupBySince("daily", testObserver)
+
+        testObserver.awaitTerminalEvent()
+
+        assertSuccess(testObserver)
+    }
+
+    @Test
+    fun testTrendingWithJsoupWeekly() {
+
+        val testObserver = TestObserver<TrendingCard>()
+
+        buildTrendingWithJsoupBySince("weekly", testObserver)
+
+        testObserver.awaitTerminalEvent()
+
+        assertSuccess(testObserver)
+    }
+
+    @Test
+    fun testTrendingWithJsoupMonthly() {
+
+        val testObserver = TestObserver<TrendingCard>()
+
+        buildTrendingWithJsoupBySince("monthly", testObserver)
+
+        testObserver.awaitTerminalEvent()
+
+        assertSuccess(testObserver)
     }
 
     @Test
