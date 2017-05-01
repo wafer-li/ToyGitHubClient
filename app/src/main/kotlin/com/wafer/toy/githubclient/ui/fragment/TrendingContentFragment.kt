@@ -46,11 +46,10 @@ class TrendingContentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         pageTitle = arguments.getString(Constants.PAGE_TITLE)
         trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
         since = getSinceParam(trendingTitles.indexOf(pageTitle))
-
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
