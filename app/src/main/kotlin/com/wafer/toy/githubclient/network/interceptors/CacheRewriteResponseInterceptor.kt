@@ -1,5 +1,7 @@
 package com.wafer.toy.githubclient.network.interceptors
 
+import com.wafer.toy.githubclient.network.ApiManager
+import okhttp3.CacheControl
 import okhttp3.Interceptor
 
 /**
@@ -10,7 +12,15 @@ import okhttp3.Interceptor
  */
 object CacheRewriteResponseInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val originalResponse = chain.proceed(chain.request())
+        var request = chain.request()
+        if (!ApiManager.isNetworkAvailable()) {
+            request = request.newBuilder()
+                    .removeHeader("Pragma")
+                    .cacheControl(CacheControl.FORCE_CACHE)
+                    .build()
+        }
+
+        val originalResponse = chain.proceed(request)
         val cacheControl = originalResponse.header("Cache-Control")
 
         if (isRemoteNoCache(cacheControl)) {
