@@ -42,7 +42,7 @@ class TrendingApiTest {
 
 
     private fun buildTrendingWithJsoupBySince(since: String, testObserver: TestObserver<TrendingCard>) {
-        ApiManager.createTrendingService(Trending::class.java)
+        trending
                 .getTrending(since = since)
                 .subscribeOn(Schedulers.io())
                 .filter { it.isSuccessful }
