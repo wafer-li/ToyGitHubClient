@@ -5,12 +5,12 @@ import okhttp3.CacheControl
 import okhttp3.Interceptor
 
 /**
- * The CacheRewriteResponseInterceptor
+ * The CacheInterceptor
  * Please put more info here.
  * @author wafer
  * @since 17/5/1 17:18
  */
-object CacheRewriteResponseInterceptor : Interceptor {
+object CacheInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         var request = chain.request()
         if (!ApiManager.isNetworkAvailable()) {
