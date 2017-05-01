@@ -12,13 +12,11 @@ import com.wafer.toy.githubclient.network.interceptors.CacheRewriteRequestOfflin
 import com.wafer.toy.githubclient.network.interceptors.CacheRewriteResponseInterceptor
 import com.wafer.toy.githubclient.network.interceptors.CommonHeaderInterceptor
 import okhttp3.Cache
-import okhttp3.CacheControl
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 
@@ -47,12 +45,6 @@ object ApiManager {
     }
 
     private lateinit var cache: Cache
-
-    private val cacheControl =
-            CacheControl.Builder()
-                    .maxAge(0, TimeUnit.SECONDS)
-                    .maxStale(365, TimeUnit.DAYS)
-                    .build()
 
     private val retrofitBuilder: Retrofit.Builder =
             Retrofit.Builder()
