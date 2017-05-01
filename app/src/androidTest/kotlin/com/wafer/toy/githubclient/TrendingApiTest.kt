@@ -65,13 +65,16 @@ class TrendingApiTest {
                     val forks = it.select("a[href=\"$repoLink/network\"]").first().text().filter { it.isDigit() }.toInt()
 
                     val contributors = it.select("a[href=$repoLink/graphs/contributors]").first()
-                            .children()
-                            .map {
+                            ?.children()
+                            ?.map {
                                 // it is the contributor's avatar
                                 val userName = it.attr("alt").apply { drop(1) }
                                 val avatarUrl = it.attr("src")
                                 User(userName = userName, avatarUrl = avatarUrl)
-                            }
+                            } ?: listOf()
+
+                    val starsTimeInterval = it.select("span.float-right").first().text()
+                            .filterNot { it == ',' }
 
                     val repo = Repo(fullName = repoTitle,
                             name = repoTitle.split("/")[1],
@@ -80,7 +83,7 @@ class TrendingApiTest {
                             stargazersCount = stars,
                             forksCount = forks)
 
-                    TrendingCard(repo, contributors)
+                    TrendingCard(repo, contributors, starsTimeInterval)
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(testSubscriber)
@@ -99,13 +102,13 @@ class TrendingApiTest {
                                 stargazersCount != null && stargazersCount != 0 &&
                                 forksCount != null && forksCount != 0
                     } &&
-                            it.contributors.all {
+                            (it.contributors.any {
                                 it.run {
                                     !userName.isNullOrBlank() &&
                                             userName!!.contains("@") &&
                                             !avatarUrl.isNullOrBlank()
                                 }
-                            }
+                            } || it.contributors.isEmpty())
                 }
         )
     }

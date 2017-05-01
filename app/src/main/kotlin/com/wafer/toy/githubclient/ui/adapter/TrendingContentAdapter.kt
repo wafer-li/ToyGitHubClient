@@ -38,11 +38,16 @@ class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
         }
 
         fun bindContributors(contributors: List<User>) {
-            val adapter = TrendingContributorAdapter(contributors)
-            itemView.authors_recycler.layoutManager =
-                    LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+            if (contributors.isNotEmpty()) {
+                val adapter = TrendingContributorAdapter(contributors)
+                itemView.authors_recycler.layoutManager =
+                        LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
 
-            itemView.authors_recycler.adapter = adapter
+                itemView.authors_recycler.adapter = adapter
+            } else {
+                itemView.authors_recycler.visibility = View.GONE
+                itemView.built_by_text.visibility = View.GONE
+            }
         }
 
         fun bindStarsTimeInterval(starsTimeInterval: String) {

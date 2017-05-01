@@ -88,13 +88,13 @@ class TrendingContentFragment : Fragment() {
                                 .filter { it.isDigit() }.toInt()
 
                         val contributors = it.select("a[href=$repoLink/graphs/contributors]").first()
-                                .children()
-                                .map {
+                                ?.children()
+                                ?.map {
                                     // it is the contributor's avatar
                                     val userName = it.attr("alt").apply { drop(1) }
                                     val avatarUrl = it.attr("src")
                                     User(userName = userName, avatarUrl = avatarUrl)
-                                }
+                                } ?: listOf()
 
                         val starsTimeInterval = it.select("span.float-right").first().text()
                                 .filterNot { it == ',' }
