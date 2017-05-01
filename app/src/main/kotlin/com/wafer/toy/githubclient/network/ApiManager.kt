@@ -54,8 +54,8 @@ object ApiManager {
 
     private val clientBuilder: OkHttpClient.Builder =
             OkHttpClient.Builder()
-                    .addInterceptor(CacheRewriteResponseInterceptor)
-                    .addInterceptor(CacheRewriteRequestOfflineInterceptor)
+                    .addNetworkInterceptor(CacheRewriteResponseInterceptor)
+                    .addNetworkInterceptor(CacheRewriteRequestOfflineInterceptor)
                     .addInterceptor(CommonHeaderInterceptor)
 
     fun init(context: Context) {
