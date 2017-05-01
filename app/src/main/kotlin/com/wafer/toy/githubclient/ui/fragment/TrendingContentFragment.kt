@@ -89,6 +89,8 @@ class TrendingContentFragment : Fragment() {
                 Log.d("onERROR", "E!")
                 t?.printStackTrace()
 
+                swipe_refresh.isRefreshing = false
+
                 when (t) {
                     is HttpException -> {
                         Snackbar.make(recycler.rootView, "Network Error: ${t.code()} ${t.message()}",
