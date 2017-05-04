@@ -161,8 +161,8 @@ class TrendingContentFragment : Fragment() {
                                     User(userName = userName, avatarUrl = avatarUrl)
                                 } ?: listOf()
 
-                        val starsTimeInterval = it.select("span.float-right").first().text()
-                                .filterNot { it == ',' }
+                        val starsTimeInterval = it.select("span.float-right").first()?.text()
+                                ?.filterNot { it == ',' }
 
                         val repo = Repo(
                                 fullName = repoTitle,

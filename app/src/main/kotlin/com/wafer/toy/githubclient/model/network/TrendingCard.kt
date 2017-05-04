@@ -6,4 +6,4 @@ package com.wafer.toy.githubclient.model.network
  * @author wafer
  * @since 17/4/30 23:40
  */
-data class TrendingCard(val repo: Repo, val contributors: List<User>, val starsTimeInterval: String)
+data class TrendingCard(val repo: Repo, val contributors: List<User>, val starsTimeInterval: String?)

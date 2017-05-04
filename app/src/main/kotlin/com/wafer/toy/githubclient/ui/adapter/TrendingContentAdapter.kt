@@ -50,8 +50,12 @@ class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
             }
         }
 
-        fun bindStarsTimeInterval(starsTimeInterval: String) {
-            itemView.stars_time_interval.text = starsTimeInterval
+        fun bindStarsTimeInterval(starsTimeInterval: String?) {
+            starsTimeInterval?.let {
+                itemView.stars_time_interval_icon.visibility = View.VISIBLE
+                itemView.stars_time_interval.visibility = View.VISIBLE
+                itemView.stars_time_interval.text = it
+            }
         }
     }
 
