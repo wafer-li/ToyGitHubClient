@@ -29,6 +29,11 @@ android {
         androidTest.java.srcDirs = ['src/androidTest/kotlin']
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
         quiet true
@@ -54,7 +59,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Test compile
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -63,28 +68,29 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile 'junit:junit:4.12'
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    // Android
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support:design:25.3.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.2.0'
-    compile group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+    implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.2.0'
+    implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.2.0'
 
     // Rx*
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxkotlin:2.0.1-RC1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.0.1-RC1'
 
     // Gson
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.android.support:cardview-v7:25.3.1'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.android.support:cardview-v7:25.3.1'
 
     // Jsoup
-    compile 'org.jsoup:jsoup:1.10.2'
+    implementation 'org.jsoup:jsoup:1.10.2'
 
     // Glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 }
