@@ -74,6 +74,11 @@ dependencies {
     implementation 'com.android.support:design:25.3.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
+    // Architecture Components
+    implementation "android.arch.lifecycle:runtime:1.0.0-alpha1"
+    implementation "android.arch.lifecycle:extensions:1.0.0-alpha1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha1"
+
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.2.0'
     implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.2.0'
