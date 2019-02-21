@@ -1,13 +1,10 @@
 <resources>
     <string name="app_name">ToyGitHubClient</string>
 
-    <!-- For Preview -->
-    <string name="preview_repo_name" translatable="false">kitze / sizzy</string>
-    <string name="preview_repo_description" translatable="false">A tool for developing responsive websites crazy-fas</string>
-    <string name="preview_language" translatable="false">JavaScript</string>
-    <string name="preview_star_count" translatable="false">1275</string>
-    <string name="preview_fork_count" translatable="false">20</string>
-    <string name="preview_star_time_interval" translatable="false">1,162 stars today</string>
+    <!-- Error Message -->
+    <string name="empty_username">Empty Username</string>
+    <string name="empty_password">Empty Password</string>
+    <string name="empty_two_fa_code">Empty Two Factor Auth Code</string>
 
     <!-- Content Description -->
     <string name="content_des_github_icon">GitHub Icon</string>
@@ -19,6 +16,7 @@
     <!-- Titles -->
     <string name="title_trending">Trending</string>
     <string name="title_login">Login</string>
+    <string name="title_two_factor_auth_input">Input 2FA Code</string>
 
     <!-- Tabs Title -->
     <string name="title_tab_dashboard">DashBoard</string>
@@ -28,6 +26,7 @@
     <string name="title_tab_this_week">This Week</string>
     <string name="title_tab_this_month">This Month</string>
 
+
     <!-- Actions -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -36,11 +35,12 @@
     <string name="action_exit">Exit</string>
     <string name="action_login">Log In</string>
 
-    <string name="action_star">Star</string>
+    <string name="action_confirm">Confirm</string>
 
     <!-- Hints -->
     <string name="hint_username">Username or Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_2fa">Two Factor Auth Code</string>
 
     <!-- Other -->
     <string name="built_by">Built By: </string>

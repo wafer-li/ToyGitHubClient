@@ -12,13 +12,13 @@ import okhttp3.Response
  */
 object CommonHeaderInterceptor : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain?): Response {
-        val originRequest = chain?.request()
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val originRequest = chain.request()
 
-        val builder = originRequest?.newBuilder()
-                ?.header("Accept", "application/vnd.github.v3+json")
-                ?.header("User-Agent", Constants.APP_NAME)
+        val builder = originRequest.newBuilder()
+                .header("Accept", "application/vnd.github.v3+json")
+                .header("User-Agent", Constants.APP_NAME)
 
-        return chain!!.proceed(builder?.build())
+        return chain.proceed(builder.build())
     }
 }

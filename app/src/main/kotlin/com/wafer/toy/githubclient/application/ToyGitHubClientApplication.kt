@@ -10,7 +10,9 @@ import com.wafer.toy.githubclient.network.ApiManager
  * @since 17/4/30 01:31
  */
 class ToyGitHubClientApplication : Application() {
+
     override fun onCreate() {
+        super.onCreate()
         ApiManager.init(this)
     }
 }

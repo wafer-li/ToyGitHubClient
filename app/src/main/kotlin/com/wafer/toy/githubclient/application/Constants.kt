@@ -21,4 +21,12 @@ object Constants {
 
     const val DEFAULT_CACHE_SIZE = 16 * SIZE_MB_IN_LONG
 
+    const val REQUEST_2FA_CODE = 0
+    const val REQUEST_LOGIN = 1
+
+    const val RESULT_SUCCESS = 1
+    const val RESULT_FAIL = -1
+
+    val DEFAULT_SCOPE = listOf("repo", "user", "gist")
+
 }

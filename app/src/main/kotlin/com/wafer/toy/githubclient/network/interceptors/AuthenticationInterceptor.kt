@@ -9,13 +9,13 @@ import okhttp3.Response
  * @author wafer
  * @since 17/4/30 03:34
  */
-class AuthenticationInterceptor(val authToken: String) : Interceptor {
+class AuthenticationInterceptor(private val authToken: String) : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain?): Response {
-        val originRequest = chain?.request()
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val originRequest = chain.request()
 
-        val builder = originRequest?.newBuilder()?.header("Authorization", authToken)
+        val builder = originRequest.newBuilder().header("Authorization", authToken)
 
-        return chain!!.proceed(builder?.build())
+        return chain.proceed(builder.build())
     }
 }

@@ -17,7 +17,6 @@
 
 
         <TextView
-                android:text="@string/preview_repo_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/repo_name"
@@ -31,7 +30,6 @@
                 app:layout_constraintLeft_toLeftOf="@+id/guideline4"/>
 
         <TextView
-                android:text="@string/preview_repo_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/repo_descprition"
@@ -73,7 +71,6 @@
                 android:contentDescription="@string/content_des_language_icon"/>
 
         <TextView
-                android:text="@string/preview_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/language"
@@ -99,7 +96,6 @@
                 android:contentDescription="@string/content_des_star_icon"/>
 
         <TextView
-                android:text="@string/preview_star_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/star_count"
@@ -132,7 +128,6 @@
                 android:contentDescription="@string/content_des_source_fork_icon"/>
 
         <TextView
-                android:text="@string/preview_fork_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fork_count"
@@ -184,7 +179,6 @@
                 android:visibility="gone"/>
 
         <TextView
-                android:text="@string/preview_star_time_interval"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/stars_time_interval"

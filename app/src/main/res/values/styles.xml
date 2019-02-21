@@ -10,6 +10,9 @@
         <item name="android:textAppearanceButton">
             @style/TextAppearance.AppCompat.Widget.Button.Colored
         </item>
+
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

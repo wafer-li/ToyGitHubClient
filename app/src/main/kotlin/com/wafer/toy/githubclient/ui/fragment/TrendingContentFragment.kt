@@ -61,8 +61,7 @@ class TrendingContentFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.content_main, container, false)
-        return view
+        return inflater.inflate(R.layout.content_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -128,29 +127,29 @@ class TrendingContentFragment : Fragment() {
             ApiManager.createTrendingService(TrendingApi::class.java)
                     .getTrending(since = since)
                     .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
+                    .observeOn(Schedulers.computation())
                     .flatMap {
                         // Map the HTML source to Repos
                         Observable.fromIterable(
                                 Jsoup.parse(it.string()).select("ol.repo-list").first().children())
                     }
-                    .map {
-                        // `it` is the repo-list item, particularly <li>
-                        val repoAElement = it.select("h3 > a").first()
+                    .map { repoItem ->
+                        // repoItem is the repo-list item, particularly <li>
+                        val repoAElement = repoItem.select("h3 > a").first()
                         val repoLink = repoAElement.attr("href")
 
                         val repoTitle = repoAElement.text()
 
-                        val description = it.select(".py-1 > p").first()?.ownText()
-                        val lang = it.select("""[itemprop="programmingLanguage"]""")
+                        val description = repoItem.select(".py-1 > p").first()?.ownText()
+                        val lang = repoItem.select("""[itemprop="programmingLanguage"]""")
                                 .first()?.text() ?: getString(R.string.unknown)
 
-                        val stars = it.select("""a[href="$repoLink/stargazers"]""").first().text()
+                        val stars = repoItem.select("""a[href="$repoLink/stargazers"]""").first().text()
                                 .filter { it.isDigit() }.toInt()
-                        val forks = it.select("""a[href="$repoLink/network"]""").first().text()
+                        val forks = repoItem.select("""a[href="$repoLink/network"]""").first().text()
                                 .filter { it.isDigit() }.toInt()
 
-                        val contributors = it.select("span:containsOwn(Built By)").first()
+                        val contributors = repoItem.select("span:containsOwn(Built By)").first()
                                 ?.children()
                                 ?.map {
                                     // it is the contributor avatar's link, i.e <a>
@@ -159,7 +158,7 @@ class TrendingContentFragment : Fragment() {
                                     User(userName = userName, avatarUrl = avatarUrl)
                                 } ?: listOf()
 
-                        val starsTimeInterval = it.select("span.float-right").first()?.text()
+                        val starsTimeInterval = repoItem.select("span.float-right").first()?.text()
                                 ?.filterNot { it == ',' }
 
                         val repo = Repo(

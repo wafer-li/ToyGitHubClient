@@ -3,6 +3,7 @@ package com.wafer.toy.githubclient.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         nav_view_bottom.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
         nav_view.getHeaderView(0).imageView.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, Constants.REQUEST_LOGIN)
         }
 
         val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
@@ -94,6 +95,16 @@ class MainActivity : AppCompatActivity() {
                 toolbar.title = getString(R.string.title_trending)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("Main Activity Result", "Return!")
+        if (requestCode == Constants.REQUEST_LOGIN && resultCode == Constants.RESULT_SUCCESS) {
+            updatePageState(PageIndicator.MAIN)
+            Log.d("Main Activity Result", "Return From Login")
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {

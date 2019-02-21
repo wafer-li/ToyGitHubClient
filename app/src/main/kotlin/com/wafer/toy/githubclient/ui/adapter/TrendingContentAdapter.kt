@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.repo_card.view.*
  * @since 17/4/30 15:41
  */
 
-class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
+class TrendingContentAdapter(private val trendingCards: MutableList<TrendingCard>)
     : RecyclerView.Adapter<TrendingContentAdapter.ViewHolder>() {
 
     class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {

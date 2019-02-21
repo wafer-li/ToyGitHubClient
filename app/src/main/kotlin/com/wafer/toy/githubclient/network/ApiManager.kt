@@ -36,7 +36,7 @@ object ApiManager {
 
     private lateinit var context: Context
 
-    private val gson: Gson = GsonBuilder()
+    val gson: Gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
 

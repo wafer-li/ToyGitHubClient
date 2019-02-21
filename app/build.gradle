@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-android { compileSdkVersion 28
+android {
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.wafer.toy.githubclient"
         minSdkVersion 21
