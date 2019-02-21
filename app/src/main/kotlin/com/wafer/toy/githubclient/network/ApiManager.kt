@@ -1,5 +1,6 @@
 package com.wafer.toy.githubclient.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
@@ -25,6 +26,9 @@ import kotlin.properties.Delegates
  * @author wafer
  * @since 17/4/30 01:28
  */
+
+// Application Context won't leak
+@SuppressLint("StaticFieldLeak")
 object ApiManager {
 
     const val BASE_URL = "https://api.github.com/"
@@ -66,9 +70,8 @@ object ApiManager {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         val activeNetwork = cm.activeNetworkInfo
-        val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
 
-        return isConnected
+        return activeNetwork != null && activeNetwork.isConnected
     }
 
     fun createService(serviceClass: Class<Api>, username: String = "", password: String = ""): Api {

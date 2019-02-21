@@ -1,13 +1,13 @@
 package com.wafer.toy.githubclient.ui.fragment
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.model.network.Repo
@@ -55,21 +55,21 @@ class TrendingContentFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        pageTitle = arguments.getString(Constants.PAGE_TITLE)
+        pageTitle = arguments?.getString(Constants.PAGE_TITLE) ?: ""
         trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
         since = getSinceParam(trendingTitles.indexOf(pageTitle))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.content_main, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.content_main, container, false)
         return view
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         observer = object : Observer<TrendingCard> {
-            override fun onSubscribe(d: Disposable?) {
+            override fun onSubscribe(d: Disposable) {
                 Log.d("onSubscribe", "S!")
 
                 trendingCards.clear()
@@ -89,17 +89,15 @@ class TrendingContentFragment : Fragment() {
                     swipe_refresh.isRefreshing = false
             }
 
-            override fun onNext(t: TrendingCard?) {
+            override fun onNext(t: TrendingCard) {
                 Log.d("onNext", "N!")
 
-                if (t != null) {
-                    trendingCards.add(t)
-                }
+                trendingCards.add(t)
             }
 
-            override fun onError(t: Throwable?) {
+            override fun onError(t: Throwable) {
                 Log.d("onERROR", "E!")
-                t?.printStackTrace()
+                t.printStackTrace()
 
                 if (swipe_refresh.isRefreshing)
                     swipe_refresh.isRefreshing = false
@@ -152,12 +150,12 @@ class TrendingContentFragment : Fragment() {
                         val forks = it.select("""a[href="$repoLink/network"]""").first().text()
                                 .filter { it.isDigit() }.toInt()
 
-                        val contributors = it.select("a[href=$repoLink/graphs/contributors]").first()
+                        val contributors = it.select("span:containsOwn(Built By)").first()
                                 ?.children()
                                 ?.map {
-                                    // it is the contributor's avatar
-                                    val userName = it.attr("alt").apply { drop(1) }
-                                    val avatarUrl = it.attr("src")
+                                    // it is the contributor avatar's link, i.e <a>
+                                    val userName = it.child(0).attr("alt").apply { drop(1) }
+                                    val avatarUrl = it.child(0).attr("src")
                                     User(userName = userName, avatarUrl = avatarUrl)
                                 } ?: listOf()
 

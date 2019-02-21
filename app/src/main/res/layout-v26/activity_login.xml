@@ -58,8 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text|textEmailAddress"
+                android:autofillHints="@string/hint_username"
                 android:labelFor="@+id/email"
-                tools:ignore="Autofill,LabelFor"/>
+                tools:ignore="LabelFor"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -79,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:labelFor="@+id/password"
-                tools:ignore="Autofill,LabelFor"/>
+                tools:ignore="LabelFor"
+                android:autofillHints="@string/hint_password"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,8 +1,8 @@
 package com.wafer.toy.githubclient
 
 import android.content.Context
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.InstrumentationRegistry
+import androidx.test.runner.AndroidJUnit4
 import com.wafer.toy.githubclient.model.network.Repo
 import com.wafer.toy.githubclient.model.network.TrendingCard
 import com.wafer.toy.githubclient.model.network.User

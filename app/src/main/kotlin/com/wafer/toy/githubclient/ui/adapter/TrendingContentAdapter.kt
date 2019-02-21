@@ -1,10 +1,10 @@
 package com.wafer.toy.githubclient.ui.adapter
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.model.network.Repo
 import com.wafer.toy.githubclient.model.network.TrendingCard
@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.repo_card.view.*
  * @author wafer
  * @since 17/4/30 15:41
  */
-
 
 class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
     : RecyclerView.Adapter<TrendingContentAdapter.ViewHolder>() {
@@ -59,14 +58,14 @@ class TrendingContentAdapter(val trendingCards: MutableList<TrendingCard>)
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindRepoInfo(trendingCards[position].repo)
-        holder?.bindContributors(trendingCards[position].contributors)
-        holder?.bindStarsTimeInterval(trendingCards[position].starsTimeInterval)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindRepoInfo(trendingCards[position].repo)
+        holder.bindContributors(trendingCards[position].contributors)
+        holder.bindStarsTimeInterval(trendingCards[position].starsTimeInterval)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.repo_card, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.repo_card, parent, false)
         return ViewHolder(view)
     }
 

@@ -3,12 +3,12 @@ package com.wafer.toy.githubclient.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.viewpager.widget.ViewPager
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.ui.adapter.MainPagerAdapter
@@ -107,6 +107,10 @@ class MainActivity : AppCompatActivity() {
     fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val id = item.itemId
+
+        when (id) {
+            R.id.nav_exit -> finish()
+        }
 
         drawer.closeDrawer(GravityCompat.START)
         return true

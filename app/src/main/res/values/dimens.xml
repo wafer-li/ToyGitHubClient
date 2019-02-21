@@ -8,4 +8,5 @@
 
     <dimen name="default_layout_padding">8dp</dimen>
     <dimen name="default_card_content_padding">4dp</dimen>
+    <dimen name="default_card_elevation">2dp</dimen>
 </resources>
