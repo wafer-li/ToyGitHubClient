@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         nav_view.getHeaderView(0).imageView.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivityForResult(intent, Constants.REQUEST_LOGIN)
+            drawer.closeDrawer(GravityCompat.START)
         }
 
         val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
