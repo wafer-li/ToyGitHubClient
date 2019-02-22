@@ -1,7 +1,6 @@
 package com.wafer.toy.githubclient.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -82,9 +81,9 @@ class LoginActivity : AppCompatActivity() {
                                 .fromJson(t.string(), Properties::class.java)
                                 .getProperty("token")
 
-                        val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
+                        ApiManager.token = token
 
-                        pref.edit().putString(Constants.PREF_OAUTH_TOKEN, token)
+                        ApiManager.pref.edit().putString(Constants.PREF_OAUTH_TOKEN, token)
                                 .commit() // ensure token is stored
                     }
 

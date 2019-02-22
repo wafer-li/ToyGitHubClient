@@ -1,7 +1,6 @@
 package com.wafer.toy.githubclient.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -61,7 +60,6 @@ class TwoFactorAuthInput : AppCompatActivity() {
             if (twoFACode.isBlank())
                 two_factor_code.error = getString(R.string.empty_two_fa_code)
             else {
-
                 val observer = object : Observer<ResponseBody> {
                     override fun onComplete() {
                         setResult(Constants.RESULT_SUCCESS)
@@ -73,14 +71,11 @@ class TwoFactorAuthInput : AppCompatActivity() {
                     }
 
                     override fun onNext(it: ResponseBody) {
-
                         val token = ApiManager.gson
                                 .fromJson(it.string(), JsonObject::class.java)["token"].asString
 
-
-                        val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
-
-                        pref.edit().putString(Constants.PREF_OAUTH_TOKEN, token)
+                        ApiManager.token = token
+                        ApiManager.pref.edit().putString(Constants.PREF_OAUTH_TOKEN, token)
                                 .commit() // ensure token is stored
                     }
 

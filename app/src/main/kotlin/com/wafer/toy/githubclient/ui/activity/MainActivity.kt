@@ -1,6 +1,5 @@
 package com.wafer.toy.githubclient.ui.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +9,22 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
+import com.wafer.toy.githubclient.model.network.User
+import com.wafer.toy.githubclient.network.Api
+import com.wafer.toy.githubclient.network.ApiManager
 import com.wafer.toy.githubclient.ui.adapter.MainPagerAdapter
 import com.wafer.toy.githubclient.ui.fragment.TrendingContentFragment
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
+import retrofit2.HttpException
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         MAIN, TRENDING
     }
 
-    var indicator = PageIndicator.TRENDING
+    private var indicator = PageIndicator.TRENDING
     lateinit var pagerAdapter: MainPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,17 +49,18 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         nav_view_bottom.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
-        nav_view.getHeaderView(0).imageView.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivityForResult(intent, Constants.REQUEST_LOGIN)
-            drawer.closeDrawer(GravityCompat.START)
+
+        if (ApiManager.isLogin()) {
+            updateDrawerHeader()
+        } else {
+            nav_view.getHeaderView(0).imageView.setOnClickListener {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivityForResult(intent, Constants.REQUEST_LOGIN)
+                drawer.closeDrawer(GravityCompat.START)
+            }
         }
 
-        val pref = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
-
-        val isLogin = pref.getString(Constants.PREF_OAUTH_TOKEN, null).isNullOrEmpty().not()
-
-        indicator = if (isLogin) PageIndicator.MAIN else PageIndicator.TRENDING
+        indicator = if (ApiManager.isLogin()) PageIndicator.MAIN else PageIndicator.TRENDING
 
         pagerAdapter = MainPagerAdapter(supportFragmentManager, applicationContext)
 
@@ -101,8 +110,9 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d("Main Activity Result", "Return!")
         if (requestCode == Constants.REQUEST_LOGIN && resultCode == Constants.RESULT_SUCCESS) {
+            ApiManager.api = ApiManager.createService(Api::class.java, ApiManager.token)
             updatePageState(PageIndicator.MAIN)
-            Log.d("Main Activity Result", "Return From Login")
+            updateDrawerHeader()
         }
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -114,6 +124,41 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun updateDrawerHeader() {
+        ApiManager.api.getUser()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<User> {
+                    override fun onComplete() {
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onNext(t: User) {
+                        val headerView = nav_view.getHeaderView(0)
+
+                        Glide.with(this@MainActivity)
+                                .load(t.avatarUrl)
+                                .into(headerView.imageView)
+
+                        headerView.navUsername.text = t.userName
+                    }
+
+                    override fun onError(e: Throwable) {
+                        when (e) {
+                            is HttpException -> {
+                                ApiManager.token
+
+                                Log.d("Nav Update Error", e.message() + "\n" +
+                                        e.response().errorBody()?.string())
+                            }
+                        }
+                    }
+                })
+
     }
 
     fun onNavigationItemSelected(item: MenuItem): Boolean {

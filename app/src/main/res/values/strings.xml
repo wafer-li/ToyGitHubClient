@@ -11,7 +11,11 @@
     <string name="content_des_star_icon">Star Icon</string>
     <string name="content_des_source_fork_icon">Source Fork Icon</string>
     <string name="content_des_language_icon">Programming Language Icon</string>
+    <string name="content_des_avatar">Avatar</string>
     <string name="content_des_avatar_icon">%1$s$ Avatar Icon</string>
+
+    <!-- Default Text -->
+    <string name="default_nav_header_username">Click to sign in</string>
 
     <!-- Titles -->
     <string name="title_trending">Trending</string>

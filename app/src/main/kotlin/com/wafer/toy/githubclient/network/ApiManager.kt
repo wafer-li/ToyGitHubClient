@@ -31,23 +31,26 @@ import kotlin.properties.Delegates
 @SuppressLint("StaticFieldLeak")
 object ApiManager {
 
-    const val BASE_URL = "https://api.github.com/"
-    const val BASE_TRENDING_URL = "https://github.com/trending/"
+    private const val BASE_URL = "https://api.github.com/"
+    private const val BASE_TRENDING_URL = "https://github.com/trending/"
+
+    lateinit var api: Api
+    lateinit var trendingApi: TrendingApi
 
     private lateinit var context: Context
+    private lateinit var cache: Cache
+
+    lateinit var pref: SharedPreferences
+    lateinit var token: String
 
     val gson: Gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
 
-    private lateinit var pref: SharedPreferences
-
-    var cacheSize: Long by Delegates.observable(Constants.DEFAULT_CACHE_SIZE) { _, _, newValue ->
+    private var cacheSize: Long by Delegates.observable(Constants.DEFAULT_CACHE_SIZE) { _, _, newValue ->
         cache = Cache(context.cacheDir, newValue)
         clientBuilder.cache(cache)
     }
-
-    private lateinit var cache: Cache
 
     private val retrofitBuilder: Retrofit.Builder =
             Retrofit.Builder()
@@ -64,7 +67,16 @@ object ApiManager {
         this.context = context.applicationContext
         pref = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
         cacheSize = pref.getInt(Constants.PREF_CACHE_SIZE, 16) * Constants.SIZE_MB_IN_LONG
+        token = pref.getString(Constants.PREF_OAUTH_TOKEN, "")!!.toString()
+
+        if (isLogin()) {
+            api = ApiManager.createService(Api::class.java, "token $token")
+        }
+
+        trendingApi = createTrendingService(TrendingApi::class.java)
     }
+
+    fun isLogin() = token.isNotEmpty()
 
     fun isNetworkAvailable(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -97,7 +109,7 @@ object ApiManager {
         return retrofit.create(serviceClass)
     }
 
-    fun createTrendingService(serviceClass: Class<TrendingApi>): TrendingApi {
+    private fun createTrendingService(serviceClass: Class<TrendingApi>): TrendingApi {
 
         val client = clientBuilder.build()
 

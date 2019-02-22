@@ -23,13 +23,13 @@ object CacheInterceptor : Interceptor {
         val originalResponse = chain.proceed(request)
         val cacheControl = originalResponse.header("Cache-Control")
 
-        if (isRemoteNoCache(cacheControl)) {
-            return originalResponse.newBuilder()
+        return if (isRemoteNoCache(cacheControl)) {
+            originalResponse.newBuilder()
                     .removeHeader("Pragma")
                     .header("Cache-Control", "public, max-age=" + 5000)
                     .build()
         } else
-            return originalResponse
+            originalResponse
     }
 
     private fun isRemoteNoCache(cacheControl: String?): Boolean =
