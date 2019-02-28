@@ -77,10 +77,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-                val fragment = pagerAdapter.getItem(position)
-
-                if (fragment is TrendingContentFragment)
-                    fragment.isFragmentVisible = true
             }
 
         })

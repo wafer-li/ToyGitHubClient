@@ -39,9 +39,6 @@ class MainPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerAda
 
                     TrendingContentFragment().apply {
                         arguments = args
-
-                        if (index != 0)
-                            isFragmentVisible = false
                     }
                 }
             }

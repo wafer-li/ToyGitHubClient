@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.trello.rxlifecycle3.android.lifecycle.kotlin.bindToLifecycle
 import com.wafer.toy.githubclient.R
 import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.model.network.Repo
@@ -23,7 +25,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
 import org.jsoup.Jsoup
 import retrofit2.HttpException
-import kotlin.properties.Delegates
 
 
 /**
@@ -38,18 +39,12 @@ class TrendingContentFragment : Fragment() {
     private lateinit var trendingTitles: Array<out String>
     private lateinit var since: String
     private lateinit var observer: Observer<TrendingCard>
+    private lateinit var disposable: Disposable
 
     private val trendingCards = mutableListOf<TrendingCard>()
     private val trendingContentAdapter = TrendingContentAdapter(trendingCards)
 
     private var isLoaded = false
-
-    var isFragmentVisible by Delegates.observable(true) {
-        _, _, visible ->
-
-        if (visible)
-            loadData(since, !isLoaded, observer)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,23 +52,16 @@ class TrendingContentFragment : Fragment() {
         pageTitle = arguments?.getString(Constants.PAGE_TITLE) ?: ""
         trendingTitles = resources.getStringArray(R.array.trending_tab_titles)
         since = getSinceParam(trendingTitles.indexOf(pageTitle))
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.content_main, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         observer = object : Observer<TrendingCard> {
             override fun onSubscribe(d: Disposable) {
                 Log.d("onSubscribe", "S!")
-
                 trendingCards.clear()
-                trendingContentAdapter.notifyDataSetChanged()
 
-                if (!swipe_refresh.isRefreshing)
+                if (isLoaded)
+                    isLoaded = false
+
+                if (isVisible && !swipe_refresh.isRefreshing)
                     swipe_refresh.isRefreshing = true
             }
 
@@ -83,7 +71,7 @@ class TrendingContentFragment : Fragment() {
                 trendingContentAdapter.notifyDataSetChanged()
                 isLoaded = true
 
-                if (swipe_refresh.isRefreshing)
+                if (isVisible && swipe_refresh.isRefreshing)
                     swipe_refresh.isRefreshing = false
             }
 
@@ -97,7 +85,7 @@ class TrendingContentFragment : Fragment() {
                 Log.d("onERROR", "E!")
                 t.printStackTrace()
 
-                if (swipe_refresh.isRefreshing)
+                if (isVisible && swipe_refresh.isRefreshing)
                     swipe_refresh.isRefreshing = false
 
                 when (t) {
@@ -111,68 +99,74 @@ class TrendingContentFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.content_main, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         recycler.layoutManager = LinearLayoutManager(activity)
         recycler.adapter = trendingContentAdapter
 
-        swipe_refresh.setOnRefreshListener { loadData(since, true, observer) }
+        swipe_refresh.setOnRefreshListener { loadData(since, observer) }
 
-        if (isFragmentVisible)
-            loadData(since, !isLoaded, observer)
+        if (!isLoaded)
+            loadData(since, observer)
     }
 
-    private fun loadData(since: String, openLoad: Boolean, observer: Observer<TrendingCard>) {
-        if (openLoad) {
-            ApiManager.trendingApi
-                    .getTrending(since = since)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.computation())
-                    .flatMap {
-                        // Map the HTML source to Repos
-                        Observable.fromIterable(
-                                Jsoup.parse(it.string()).select("ol.repo-list").first().children())
-                    }
-                    .map { repoItem ->
-                        // repoItem is the repo-list item, particularly <li>
-                        val repoAElement = repoItem.select("h3 > a").first()
-                        val repoLink = repoAElement.attr("href")
+    private fun loadData(since: String, observer: Observer<TrendingCard>) {
+        ApiManager.trendingApi
+                .getTrending(since = since)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .flatMap {
+                    // Map the HTML source to Repos
+                    Observable.fromIterable(
+                            Jsoup.parse(it.string()).select("ol.repo-list").first().children())
+                }
+                .map { repoItem ->
+                    // repoItem is the repo-list item, particularly <li>
+                    val repoAElement = repoItem.select("h3 > a").first()
+                    val repoLink = repoAElement.attr("href")
 
-                        val repoTitle = repoAElement.text()
+                    val repoTitle = repoAElement.text()
 
-                        val description = repoItem.select(".py-1 > p").first()?.ownText()
-                        val lang = repoItem.select("""[itemprop="programmingLanguage"]""")
-                                .first()?.text() ?: getString(R.string.unknown)
+                    val description = repoItem.select(".py-1 > p").first()?.ownText()
+                    val lang = repoItem.select("""[itemprop="programmingLanguage"]""")
+                            .first()?.text() ?: getString(R.string.unknown)
 
-                        val stars = repoItem.select("""a[href="$repoLink/stargazers"]""").first().text()
-                                .filter { it.isDigit() }.toInt()
-                        val forks = repoItem.select("""a[href="$repoLink/network"]""").first().text()
-                                .filter { it.isDigit() }.toInt()
+                    val stars = repoItem.select("""a[href="$repoLink/stargazers"]""").first().text()
+                            .filter { it.isDigit() }.toInt()
+                    val forks = repoItem.select("""a[href="$repoLink/network"]""").first().text()
+                            .filter { it.isDigit() }.toInt()
 
-                        val contributors = repoItem.select("span:containsOwn(Built By)").first()
-                                ?.children()
-                                ?.map {
-                                    // it is the contributor avatar's link, i.e <a>
-                                    val userName = it.child(0).attr("alt").apply { drop(1) }
-                                    val avatarUrl = it.child(0).attr("src")
-                                    User(userName = userName, avatarUrl = avatarUrl)
-                                } ?: listOf()
+                    val contributors = repoItem.select("span:containsOwn(Built By)").first()
+                            ?.children()
+                            ?.map {
+                                // it is the contributor avatar's link, i.e <a>
+                                val userName = it.child(0).attr("alt").apply { drop(1) }
+                                val avatarUrl = it.child(0).attr("src")
+                                User(userName = userName, avatarUrl = avatarUrl)
+                            } ?: listOf()
 
-                        val starsTimeInterval = repoItem.select("span.float-right").first()?.text()
-                                ?.filterNot { it == ',' }
+                    val starsTimeInterval = repoItem.select("span.float-right").first()?.text()
+                            ?.filterNot { it == ',' }
 
-                        val repo = Repo(
-                                fullName = repoTitle,
-                                name = repoTitle.split("/")[1],
-                                description = description,
-                                language = lang,
-                                stargazersCount = stars,
-                                forksCount = forks)
+                    val repo = Repo(
+                            fullName = repoTitle,
+                            name = repoTitle.split("/")[1],
+                            description = description,
+                            language = lang,
+                            stargazersCount = stars,
+                            forksCount = forks)
 
-                        TrendingCard(repo, contributors, starsTimeInterval)
-                    }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(observer)
-        }
+                    TrendingCard(repo, contributors, starsTimeInterval)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer)
     }
 
 

@@ -36,7 +36,7 @@ class TrendingApiTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getTargetContext()
-        trendingApi = ApiManager.apply { init(context) }.createTrendingService(TrendingApi::class.java)
+        trendingApi = ApiManager.apply { init(context) }.trendingApi
     }
 
     @Test
