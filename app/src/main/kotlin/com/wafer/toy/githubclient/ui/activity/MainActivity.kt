@@ -69,18 +69,6 @@ class MainActivity : AppCompatActivity() {
 
         view_pager.adapter = pagerAdapter
 
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-            }
-
-        })
-
         tabs.setupWithViewPager(view_pager)
     }
 
@@ -106,7 +94,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d("Main Activity Result", "Return!")
         if (requestCode == Constants.REQUEST_LOGIN && resultCode == Constants.RESULT_SUCCESS) {
-            ApiManager.api = ApiManager.createService(Api::class.java, ApiManager.token)
+            ApiManager.api = ApiManager.createService(Api::class.java, "token ${ApiManager.token}")
             updatePageState(PageIndicator.MAIN)
             updateDrawerHeader()
         }

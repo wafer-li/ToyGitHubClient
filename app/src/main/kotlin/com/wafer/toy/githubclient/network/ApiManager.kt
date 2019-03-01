@@ -11,6 +11,7 @@ import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.network.interceptors.AuthenticationInterceptor
 import com.wafer.toy.githubclient.network.interceptors.CacheInterceptor
 import com.wafer.toy.githubclient.network.interceptors.CommonHeaderInterceptor
+import com.wafer.toy.githubclient.util.CredentialHelper
 import okhttp3.Cache
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
@@ -67,7 +68,8 @@ object ApiManager {
         this.context = context.applicationContext
         pref = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
         cacheSize = pref.getInt(Constants.PREF_CACHE_SIZE, 16) * Constants.SIZE_MB_IN_LONG
-        token = pref.getString(Constants.PREF_OAUTH_TOKEN, "")!!.toString()
+
+        token = CredentialHelper.decrypt(pref.getString(Constants.PREF_OAUTH_TOKEN, null))
 
         if (isLogin()) {
             api = ApiManager.createService(Api::class.java, "token $token")

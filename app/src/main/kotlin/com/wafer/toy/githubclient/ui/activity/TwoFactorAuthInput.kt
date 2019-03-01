@@ -15,6 +15,7 @@ import com.wafer.toy.githubclient.application.Constants
 import com.wafer.toy.githubclient.model.network.AuthRequest
 import com.wafer.toy.githubclient.network.Api
 import com.wafer.toy.githubclient.network.ApiManager
+import com.wafer.toy.githubclient.util.CredentialHelper
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -75,8 +76,10 @@ class TwoFactorAuthInput : AppCompatActivity() {
                                 .fromJson(it.string(), JsonObject::class.java)["token"].asString
 
                         ApiManager.token = token
-                        ApiManager.pref.edit().putString(Constants.PREF_OAUTH_TOKEN, token)
-                                .commit() // ensure token is stored
+                        ApiManager.pref.edit()
+                                .putString(Constants.PREF_OAUTH_TOKEN,
+                                        CredentialHelper.encrypt(token))
+                                .apply()
                     }
 
                     override fun onError(it: Throwable) {
